@@ -147,21 +147,29 @@ ul li a:hover,
 }
 
 /* Dropdown */
-.dropdown{
-    display:none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: var(--clr-rosa);
-    border-radius: 5px;
-    padding: 5px 0;
-    min-width: 120px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 100;
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--clr-rosa);
+  border-radius: 5px;
+  padding: 5px 0;
+  min-width: 120px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 100;
 }
 
-ul li:hover ul.dropdown{
-    display:block;
+.navbar ul li {
+  position: relative;
+}
+
+.navbar ul .dropdown {
+  display: none;
+}
+
+.navbar ul li:hover > .dropdown {
+  display: block;
 }
 
 /* Botones de usuario (Login/Registro) */
@@ -842,8 +850,8 @@ figcaption {
    ================================= */
 footer {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     background: var(--clr-rosa);
     color: var(--clr-cafe);
     padding: 15px 40px;
@@ -851,8 +859,11 @@ footer {
     margin-top: auto; /* Empuja el footer hacia abajo */
 }
 
-.footer-left h2 {
-    margin-bottom: 15px;
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 .footer-left .logos img {
@@ -860,6 +871,16 @@ footer {
     margin-right: 10px;
 }
 
-.footer-right p {
-    margin-bottom: 10px;
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--clr-rosa);
+    padding: 15px 40px;
+}
+
+.logo img {
+    height: 2.5rem;
+    width: auto;
+    display: block;
 }
