@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect, createContext, useContext } from "react";
+import { createContext, useState, useRef, useEffect, useContext } from "react";
 import { NavLink, Link } from "react-router-dom";
 import pastelerialogo from "../assets/pasteleria-logo.svg";
 
-const CarritoContext = createContext();
+// CREA Y EXPORTA EL CONTEXTO AQUÍ
+export const CarritoContext = createContext();
 
 export function useCarrito() {
   return useContext(CarritoContext);
@@ -80,7 +81,7 @@ export default function Navbar() {
       </Link>
       <nav className="navbar">
         <ul>
-          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/index">Home</NavLink></li>
           <li>
             <NavLink to="/productos">Productos</NavLink>
             <ul className="dropdown">
