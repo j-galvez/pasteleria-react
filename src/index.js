@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './styles/style.css';
+import { CarritoProvider } from './components/Navbar';
 
 const link1 = document.createElement('link');
 link1.rel = 'preconnect';
@@ -25,7 +26,9 @@ document.head.appendChild(fontLink);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <CarritoProvider>
     <App />
+    </CarritoProvider>
   </React.StrictMode>
 );
 
