@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import pastelerialogo from "../assets/pasteleria-logo.svg";
+import Index from "../pages/Index";
 
 export default function Navbar() {
   const [carroOpen, setCarroOpen] = useState(false);
@@ -29,7 +30,8 @@ export default function Navbar() {
       </Link>
       <nav className="navbar">
         <ul>
-          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/index">Home</NavLink></li>
+          
           <li>
             <NavLink to="/productos">Productos</NavLink>
             <ul className="dropdown">
