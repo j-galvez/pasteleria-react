@@ -12,7 +12,7 @@ import Contacto from './pages/Contacto';
 // import Productos from './pages/Productos';
 // import Tortas from './pages/Tortas';
 // import Postres from './pages/Postres';
-// import Carrito from './pages/Carrito';
+import Carrito from './pages/Carrito';
 import Nosotros from './pages/Nosotros';
 
 function App() {
@@ -26,9 +26,9 @@ function App() {
         <Route path="/productos" element={<Productos />} />
         <Route path="/tortas" element={<Tortas />} />
         <Route path="/postres" element={<Postres />} />
-        <Route path="/carrito" element={<Carrito />} />
         */}
-
+        <Route path="/carrito" element={<Carrito />} />
+        <Route path="/nosotros" element={<Nosotros />} />
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/blog1" element={<Blog1 />} />
         <Route path="/blog2" element={<Blog2 />} />
