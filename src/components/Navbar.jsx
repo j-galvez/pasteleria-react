@@ -1,11 +1,61 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, createContext, useContext } from "react";
 import { NavLink, Link } from "react-router-dom";
 import pastelerialogo from "../assets/pasteleria-logo.svg";
-import Index from "../pages/Index";
+
+const CarritoContext = createContext();
+
+export function useCarrito() {
+  return useContext(CarritoContext);
+}
+
+export function CarritoProvider({ children }) {
+  const [carrito, setCarrito] = useState(() => {
+    return JSON.parse(localStorage.getItem("carrito")) || [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+  }, [carrito]);
+
+  const agregarAlCarrito = (nombre, precio) => {
+    setCarrito((prev) => {
+      const existe = prev.find((p) => p.nombre === nombre);
+      if (existe) {
+        return prev.map((p) =>
+          p.nombre === nombre ? { ...p, cantidad: p.cantidad + 1 } : p
+        );
+      }
+      return [...prev, { nombre, precio, cantidad: 1 }];
+    });
+  };
+
+  const eliminarDelCarrito = (nombre) => {
+    setCarrito((prev) => prev.filter((p) => p.nombre !== nombre));
+  };
+
+  const modificarCantidad = (nombre, cantidad) => {
+    setCarrito((prev) =>
+      prev
+        .map((p) =>
+          p.nombre === nombre ? { ...p, cantidad: parseInt(cantidad) } : p
+        )
+        .filter((p) => p.cantidad > 0)
+    );
+  };
+
+  return (
+    <CarritoContext.Provider
+      value={{ carrito, agregarAlCarrito, eliminarDelCarrito, modificarCantidad }}
+    >
+      {children}
+    </CarritoContext.Provider>
+  );
+}
 
 export default function Navbar() {
   const [carroOpen, setCarroOpen] = useState(false);
   const carroRef = useRef();
+  const { carrito } = useCarrito();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -30,8 +80,7 @@ export default function Navbar() {
       </Link>
       <nav className="navbar">
         <ul>
-          <li><NavLink to="/index">Home</NavLink></li>
-          
+          <li><NavLink to="/">Home</NavLink></li>
           <li>
             <NavLink to="/productos">Productos</NavLink>
             <ul className="dropdown">
@@ -52,10 +101,20 @@ export default function Navbar() {
         onClick={() => setCarroOpen((open) => !open)}
         style={{ position: "relative", cursor: "pointer" }}
       >
-        🛒 Carro <span id="carro-cantidad">0</span>
+        🛒 Carro <span id="carro-cantidad">{carrito.length}</span>
         {carroOpen && (
           <div id="carro-dropdown" className="carro-dropdown" style={{ position: "absolute", right: 0, top: "100%" }}>
-            <div id="carro-lista"></div>
+            <div id="carro-lista">
+              {carrito.length === 0 ? (
+                <div style={{ padding: "10px", textAlign: "center" }}>El carrito está vacío</div>
+              ) : (
+                carrito.map((item, index) => (
+                  <div key={index} style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
+                    {item.nombre} - ${item.precio} x {item.cantidad}
+                  </div>
+                ))
+              )}
+            </div>
             <Link to="/carrito" className="btn-pagar" style={{ marginTop: "10px", display: "block", textAlign: "center" }}>
               Ir a carrito
             </Link>
