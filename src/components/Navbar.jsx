@@ -83,7 +83,7 @@ export default function Navbar() {
         <ul>
           <li><NavLink to="/index">Home</NavLink></li>
           <li>
-            <NavLink to="/productos">Productos</NavLink>
+            <NavLink to="#">Productos</NavLink>
             <ul className="dropdown">
               <li><NavLink to="/tortas">Tortas</NavLink></li>
               <li><NavLink to="/postres">Postres</NavLink></li>
