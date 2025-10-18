@@ -58,6 +58,9 @@ export default function Navbar() {
   const carroRef = useRef();
   const { carrito } = useCarrito();
 
+  // mostrar cantidad total (sumando cantidades) en el badge
+  const totalCantidad = carrito.reduce((acc, p) => acc + (p.cantidad || 0), 0);
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (carroRef.current && !carroRef.current.contains(event.target)) {
@@ -76,7 +79,7 @@ export default function Navbar() {
 
   return (
     <header>
-      <Link to="/" className="logo">
+      <Link to="/index" className="logo">
         <img src={pastelerialogo} alt="Pasteleria Logo" style={{ height: "2.5rem", width: "auto" }} />
       </Link>
       <nav className="navbar">
@@ -102,16 +105,16 @@ export default function Navbar() {
         onClick={() => setCarroOpen((open) => !open)}
         style={{ position: "relative", cursor: "pointer" }}
       >
-        🛒 Carro <span id="carro-cantidad">{carrito.length}</span>
+        🛒 Carro <span id="carro-cantidad">{totalCantidad}</span>
         {carroOpen && (
           <div id="carro-dropdown" className="carro-dropdown" style={{ position: "absolute", right: 0, top: "100%" }}>
             <div id="carro-lista">
               {carrito.length === 0 ? (
                 <div style={{ padding: "10px", textAlign: "center" }}>El carrito está vacío</div>
               ) : (
-                carrito.map((item, index) => (
-                  <div key={index} style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
-                    {item.nombre} - ${item.precio} x {item.cantidad}
+                carrito.map((item) => (
+                  <div key={item.nombre} style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
+                    {item.nombre} - ${item.precio.toLocaleString()} x {item.cantidad} <span style={{ float: "right" }}>${(item.precio * item.cantidad).toLocaleString()}</span>
                   </div>
                 ))
               )}
