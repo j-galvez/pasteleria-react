@@ -6,7 +6,7 @@ export default function Carrito() {
             <div id="carrito-contenido"></div>
             <div id="carrito-resumen"></div>
             <div style={{ textAlign: "right", marginTop: "20px" }}>
-                <a href="pago.html" className="btn-pagar">Ir a pagar</a>
+                <a href="pago" className="btn-pagar">Ir a pagar</a>
             </div>
         </div>
     </main>
