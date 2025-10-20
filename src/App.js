@@ -8,10 +8,9 @@ import Blogs from './pages/Blogs';
 import Blog1 from './pages/Blog1';
 import Blog2 from './pages/Blog2';
 import Contacto from './pages/Contacto';
-
 // import Productos from './pages/Productos';
-// import Tortas from './pages/Tortas';
-// import Postres from './pages/Postres';
+import Tortas from './pages/Tortas';
+import Postres from './pages/Postres';
 import Carrito from './pages/Carrito';
 import Nosotros from './pages/Nosotros';
 import Pago from './pages/Pago';
@@ -22,11 +21,13 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/index" element={<Index/>} />
+        <Route path="/tortas" element={<Tortas/>}/>
+        <Route path="/postres" element={<Postres />} />
         {/*
         <Route path="/" element={<Home title="Mil Sabores" />} />
         <Route path="/productos" element={<Productos />} />
-        <Route path="/tortas" element={<Tortas />} />
-        <Route path="/postres" element={<Postres />} />
+        
+        
         */}
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/pago" element={<Pago />} />
