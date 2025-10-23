@@ -1,22 +1,29 @@
 import React from "react";
 import { useCarrito } from "../components/Navbar";
-import "../utils/Carrito.logic.js"; // <-- Importa la lógica antes de usarla
+import '../utils/Carrito.logic.js';
+
+function obtenerUsuarioLogueado() {
+  return JSON.parse(localStorage.getItem("usuarioLogueado")) || null;
+}
 
 export default function Carrito() {
   const { carrito, eliminarDelCarrito, modificarCantidad } = useCarrito();
 
-  // 🔹 Usamos las funciones desde la lógica externa
-  const usuario = window.CarritoLogic.obtenerUsuarioLogueado();
-  const total = window.CarritoLogic.calcularTotal(carrito);
+  const total = carrito.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
 
-  // 🔹 Obtenemos descuento y mensaje desde la lógica
-  const { descuento, mensajeBeneficio } =
-    window.CarritoLogic.obtenerDescuentoYMensaje(usuario);
-
-  const totalConDescuento = window.CarritoLogic.calcularTotalConDescuento(
-    total,
-    descuento
-  );
+  const usuario = obtenerUsuarioLogueado();
+  let descuento = 0;
+  let mensajeBeneficio = "";
+  if (usuario && usuario.beneficios) {
+    if (usuario.beneficios.descuento) {
+      descuento = usuario.beneficios.descuento;
+      mensajeBeneficio =
+        descuento === 0.5
+          ? "¡Tienes 50% de descuento por ser mayor de 50 años!"
+          : "¡Tienes 10% de descuento por código FELICES50!";
+    }
+  }
+  const totalConDescuento = descuento > 0 ? total * (1 - descuento) : total;
 
   return (
     <main>
@@ -38,18 +45,11 @@ export default function Carrito() {
               </thead>
               <tbody>
                 {carrito.map((p) => {
-                  // 🔹 Validamos precio y cantidad antes de multiplicar
-                  const precio = parseFloat(p.precio);
-                  const cantidad = parseFloat(p.cantidad);
-                  const subtotal =
-                    !isNaN(precio) && !isNaN(cantidad)
-                      ? precio * cantidad
-                      : 0;
-
+                  const subtotal = p.precio * p.cantidad;
                   return (
                     <tr key={p.nombre}>
                       <td>{p.nombre}</td>
-                      <td>${precio.toLocaleString()}</td>
+                      <td>${p.precio.toLocaleString()}</td>
                       <td>
                         <input
                           type="number"
@@ -88,14 +88,7 @@ export default function Carrito() {
                 })}
                 {descuento > 0 && (
                   <tr>
-                    <td
-                      colSpan={3}
-                      style={{
-                        textAlign: "right",
-                        fontWeight: "bold",
-                        color: "#8B4513",
-                      }}
-                    >
+                    <td colSpan={3} style={{ textAlign: "right", fontWeight: "bold", color: "#8B4513" }}>
                       Descuento:
                     </td>
                     <td colSpan={2} style={{ color: "#8B4513" }}>
@@ -110,19 +103,12 @@ export default function Carrito() {
 
         <div id="carrito-resumen" style={{ marginTop: 16 }}>
           <h3>Total: ${totalConDescuento.toLocaleString()}</h3>
-
-          {mensajeBeneficio && (
-            <p style={{ color: "#8B4513" }}>{mensajeBeneficio}</p>
+          {mensajeBeneficio && <p style={{ color: "#8B4513" }}>{mensajeBeneficio}</p>}
+          {usuario && usuario.beneficios && usuario.beneficios.tortaGratisCumple && (
+            <p style={{ color: "#8B4513" }}>
+              ¡El día de tu cumpleaños tienes una torta gratis!
+            </p>
           )}
-
-          {usuario &&
-            usuario.beneficios &&
-            usuario.beneficios.tortaGratisCumple && (
-              <p style={{ color: "#8B4513" }}>
-                ¡El día de tu cumpleaños tienes una torta gratis!
-              </p>
-            )}
-
           <div style={{ textAlign: "right", marginTop: "20px" }}>
             <a href="pago.html" className="btn-pagar">
               Ir a pagar
