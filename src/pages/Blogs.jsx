@@ -1,41 +1,33 @@
 import { NavLink } from "react-router-dom";
-import egipto from "../assets/egipto.webp";
-import cheesecake from "../assets/Cheesecake.webp";
+import "../utils/Blogs.logic.js"; // <-- Importa la lógica antes de usarla
 
 export default function Blogs() {
-    return(
-         <main className="blogs-lista">
-    <h1 className="titulo-blogs">Noticias Importantes</h1>
+  // 🔹 Obtenemos la lista de blogs desde la lógica externa
+  const blogs = window.BlogsLogic.obtenerListaDeBlogs();
 
-    <section className="blog-card">
-      <div className="blog-texto">
-        <h2>Los primeros registros de la repostería fueron en Egipto</h2>
-        <p>
-          La repostería tiene sus raíces en el Antiguo Egipto, donde se comenzaron a elaborar panes dulces y
-          postres con miel, frutos secos y dátiles. Estas preparaciones eran ofrecidas en rituales y
-          celebraciones, sentando las bases de lo que hoy conocemos como pastelería.
-        </p>
-        <NavLink to="/blog1" className="btn-leer">Leer más</NavLink>
-      </div>
-      <div className="blog-img">
-        <img src={egipto} alt="Repostería en Egipto"/>
-      </div>
-    </section>
+  return (
+    <main className="blogs-lista">
+      <h1 className="titulo-blogs">Noticias Importantes</h1>
 
-    <section className="blog-card">
-      <div className="blog-texto">
-        <h2>El cheesecake es el postre más popular del mundo</h2>
-        <p>
-          Según la mayoría de las búsquedas en internet, el cheesecake se posiciona como el postre favorito a
-          nivel global. Su textura cremosa y su versatilidad en sabores lo convierten en un clásico que nunca
-          pasa de moda en la repostería internacional.
-        </p>
-        <NavLink to="/blog2" className="btn-leer">Leer más</NavLink>
-      </div>
-      <div className="blog-img">
-        <img src={cheesecake} alt="Cheesecake"/>
-      </div>
-    </section>
-  </main>
-    );
+      {/* 🔹 Render dinámico de los blogs */}
+      {blogs.map((blog) => (
+        <section key={blog.ruta} className="blog-card">
+          <div className="blog-texto">
+            <h2>{blog.titulo}</h2>
+            <p>{blog.descripcion}</p>
+            <NavLink to={blog.ruta} className="btn-leer">
+              Leer más
+            </NavLink>
+          </div>
+          <div className="blog-img">
+            {/* Carga dinámica de las imágenes desde /assets */}
+            <img
+              src={require(`../assets/${blog.imagen}`)}
+              alt={blog.alt}
+            />
+          </div>
+        </section>
+      ))}
+    </main>
+  );
 }
