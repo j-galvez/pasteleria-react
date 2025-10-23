@@ -13,6 +13,9 @@ import Tortas from './pages/Tortas';
 import Postres from './pages/Postres';
 import Carrito from './pages/Carrito';
 import Nosotros from './pages/Nosotros';
+import Login from './pages/Login';
+import Registro from './pages/Registro';
+import Pago from './pages/Pago';
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
         
         */}
         <Route path="/carrito" element={<Carrito />} />
+        <Route path="/registro" element={<Registro />} />
+        <Route path="/login" element={<Login/>} />
+        <Route path="/pago" element={<Pago />} />
         <Route path="/nosotros" element={<Nosotros />} />
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/blog1" element={<Blog1 />} />

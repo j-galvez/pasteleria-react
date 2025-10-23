@@ -14,8 +14,8 @@ export default function Index() {
     <main>
    
     <div className="user-links">
-        <NavLink to="login.html">Iniciar sesión </NavLink> | 
-        <NavLink to= "registro.html">Registrar usuario</NavLink>
+        <NavLink to="/login">Iniciar sesión </NavLink> | 
+        <NavLink to= "/registro">Registrar usuario</NavLink>
     </div>
     
    
