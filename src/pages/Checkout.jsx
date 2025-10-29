@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useCarrito } from "../components/Navbar";
+import { useCarrito } from "../context/CarritoContext.jsx";
 import "../utils/Carrito.logic.js";
 
 export default function Checkout() {
