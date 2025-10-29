@@ -891,49 +891,79 @@ header {
     display: block;
 }
 
-/* =================================
-   MODAL - Registro / Login éxito
-   ================================= */
-/* MODAL - Login éxito (moved from inline) */
-#login-success-modal,
-#registro-success-modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.4);
-  z-index: 1000;
+/* Estilos para la página de usuarios */
+.usuarios-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
-#login-success-modal .modal-content,
-#registro-success-modal .modal-content {
-  background: #fff;
-  padding: 20px 24px;
-  border-radius: 8px;
-  text-align: center;
-  min-width: 220px;
-  color: var(--clr-cafe);
-  font-weight: 600;
+.usuarios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-/* Responsive ajustes de formulario */
-@media (max-width: 480px) {
-  .form-container, .formulario {
-    width: 90%;
-    padding: 20px;
-  }
-  h1 { font-size: 2rem; }
+.btn-nuevo {
+    background: var(--clr-rosa);
+    color: var(--clr-cafe);
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-/* Estilos para la tabla de productos admin */
-.productos-lista h2 {
+.btn-nuevo:hover {
+    background: var(--clr-rosa-light);
+}
+
+.no-usuarios {
     text-align: center;
-    margin-top: 30px;
+    color: var(--clr-cafe);
 }
 
-.productos-lista .tabla-wrapper {
+.tabla-wrapper {
     overflow-x: auto;
+}
+
+.usuarios-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.usuarios-container thead tr {
+    background: var(--clr-rosa);
+    color: var(--clr-cafe);
+}
+
+.usuarios-container th,
+.usuarios-container td {
+    padding: 8px;
+    border: 1px solid #eee;
+}
+
+.btn-eliminar-usuario {
+    background: #e57373;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-eliminar-usuario:hover {
+    background: #ef5350;
+}
+
+/* =================================
+   ADMIN - PRODUCTOS
+   ================================= */
+.admin-productos {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .productos-lista table {
@@ -944,18 +974,19 @@ header {
     background: #fff;
 }
 
+.productos-lista th,
+.productos-lista td {
+    padding: 8px;
+    border: 1px solid #eee;
+    text-align: left;
+}
+
 .productos-lista thead tr {
     background: #FFC0CB;
     color: #8B4513;
 }
 
-.productos-lista th,
-.productos-lista td {
-    padding: 8px 10px;
-    border: 1px solid #eee;
-}
-
-.productos-lista td img {
+.productos-lista img {
     width: 60px;
     height: 60px;
     object-fit: cover;
@@ -963,42 +994,5 @@ header {
 }
 
 .productos-lista td:first-child {
-    text-align: center;
-}
-
-.admin-productos {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.productos-tabla {
-    width: 100%;
-    max-width: 900px;
-    margin: 30px auto;
-    border-collapse: collapse;
-    background: #fff;
-}
-
-.productos-tabla th,
-.productos-tabla td {
-    padding: 8px;
-    border: 1px solid #eee;
-    text-align: left;
-}
-
-.productos-tabla thead tr {
-    background: #FFC0CB;
-    color: #8B4513;
-}
-
-.productos-tabla img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 6px;
-}
-
-.productos-tabla td:first-child {
     text-align: center;
 }
