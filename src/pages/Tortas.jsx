@@ -49,7 +49,7 @@ export default function Tortas() {
                   <div className="card">
                     <img src={fruta_tortawebp} alt="Torta de Frutas" />
                     <h2>Torta Cuadrada Frutas</h2>
-                    <p className="precio">$50.000</p>
+                    <p className="precio">$50.000</p> 
                     <button
                       className="btn" onClick={() => window.TortasLogic.agregarTortaAlCarrito
                       (agregarAlCarrito, 'Torta de Frutas', 50000)}>Agregar</button>
