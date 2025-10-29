@@ -788,49 +788,121 @@ figcaption {
   filter: brightness(0.95);
 }
 
-/* Navbar horizontal para NavbarAdmin */
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  gap: 20px;
+.content {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-header .logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
+.content h1 {
+    margin-bottom: 30px;
 }
 
-.navbar {
-  display: block;
+.content button {
+    margin: 0 10px 20px 0;
+    padding: 8px 16px;
+    background: var(--clr-cafe);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-.navbar ul {
-  display: flex;
-  align-items: center;
-  gap: 14px; /* separación entre ítems */
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.content button:hover {
+    background: var(--clr-cafe-claro);
+}
+.seccion {
+    background: var(--clr-rosa);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
 
-.navbar li {
-  margin: 0;
+.seccion h2 {
+    color: var(--clr-cafe);
+    margin-bottom: 15px;
 }
 
-.navbar a {
-  display: inline-block;
-  padding: 8px 12px;
-  color: var(--clr-cafe);
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: 600;
+#lista-productos p,
+#lista-usuarios p {
+    padding: 10px;
+    background: white;
+    margin: 5px 0;
+    border-radius: 4px;
+}
+/* Estilos para la tabla de productos admin */
+.productos-lista h2 {
+    text-align: center;
+    margin-top: 30px;
 }
 
-.navbar a:hover,
-.navbar a.active {
-  background: var(--clr-rosa);
-  color: var(--clr-cafe);
+.productos-lista .tabla-wrapper {
+    overflow-x: auto;
+}
+
+.productos-lista table {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.productos-lista thead tr {
+    background: #FFC0CB;
+    color: #8B4513;
+}
+
+.productos-lista th,
+.productos-lista td {
+    padding: 8px 10px;
+    border: 1px solid #eee;
+}
+
+.productos-lista td img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.productos-lista td:first-child {
+    text-align: center;
+}
+
+.admin-productos {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.productos-tabla {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.productos-tabla th,
+.productos-tabla td {
+    padding: 8px;
+    border: 1px solid #eee;
+    text-align: left;
+}
+
+.productos-tabla thead tr {
+    background: #FFC0CB;
+    color: #8B4513;
+}
+
+.productos-tabla img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.productos-tabla td:first-child {
+    text-align: center;
 }
