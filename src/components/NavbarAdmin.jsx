@@ -1,8 +1,6 @@
 import pasteleriaLogo from "../assets/pasteleria-logo.svg";
 import { NavLink, Link } from "react-router-dom";
-import { useCarrito } from "../context/CarritoContext";
 import '../styles/navbarFooter.css'
-
 
 export default function NavbarAdmin(){
     return(
