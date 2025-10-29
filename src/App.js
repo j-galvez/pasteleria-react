@@ -19,7 +19,6 @@ import Pago from './pages/Pago';
 import Producto from './pages/admin/Producto';
 import Usuario from './pages/admin/Usuario';
 import Admin from './pages/admin/Admin';
-import UsuarioNuevo from './pages/admin/Usuario-nuevo';
 
 function AppContent() {
   const location = useLocation();
@@ -33,7 +32,6 @@ function AppContent() {
         <Route path="/administrador" element={<Admin/>} />
         <Route path="/administrador/producto" element={<Producto />} />
         <Route path="/administrador/usuario" element={<Usuario />} />
-        <Route path="/administrador/usuario/nuevo" element={<UsuarioNuevo />} />
 
         {/* Public Routes */}
         <Route path="/" element={<Index/>} />

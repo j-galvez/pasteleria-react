@@ -3,6 +3,13 @@ import { Link } from 'react-router-dom';
 
 export default function Usuario() {
     const [usuarios, setUsuarios] = useState([]);
+    const [nombre, setNombre] = useState("");
+    const [apellidos, setApellidos] = useState("");
+    const [correo, setCorreo] = useState("");
+    const [region, setRegion] = useState("");
+    const [comuna, setComuna] = useState("");
+    const [edad, setEdad] = useState("");
+    const [editingIndex, setEditingIndex] = useState(null);
 
     useEffect(() => {
         cargarUsuarios();
@@ -13,6 +20,38 @@ export default function Usuario() {
         setUsuarios(usuariosGuardados);
     };
 
+    const agregarUsuario = (e) => {
+        e.preventDefault();
+        const nuevosUsuarios = [...usuarios, { id: usuarios.length + 1, nombre, apellidos, correo, region, comuna, edad }];
+        localStorage.setItem('usuarios', JSON.stringify(nuevosUsuarios));
+        setUsuarios(nuevosUsuarios);
+        resetForm();
+    };
+
+    const editarUsuario = (idx) => {
+        const usuario = usuarios[idx];
+        setNombre(usuario.nombre);
+        setApellidos(usuario.apellidos);
+        setCorreo(usuario.correo);
+        setRegion(usuario.region);
+        setComuna(usuario.comuna);
+        setEdad(usuario.edad);
+        setEditingIndex(idx);
+    };
+
+    const actualizarUsuario = (e) => {
+        e.preventDefault();
+        const nuevosUsuarios = usuarios.map((usuario, idx) => {
+            if (idx === editingIndex) {
+                return { ...usuario, nombre, apellidos, correo, region, comuna, edad };
+            }
+            return usuario;
+        });
+        localStorage.setItem('usuarios', JSON.stringify(nuevosUsuarios));
+        setUsuarios(nuevosUsuarios);
+        resetForm();
+    };
+
     const eliminarUsuario = (idx) => {
         if (window.confirm("¿Seguro que deseas eliminar este usuario?")) {
             const nuevosUsuarios = usuarios.filter((_, index) => index !== idx);
@@ -21,15 +60,14 @@ export default function Usuario() {
         }
     };
 
-    const getBeneficios = (beneficios) => {
-        if (!beneficios) return '';
-        
-        const listaBeneficios = [];
-        if (beneficios.descuento === 0.5) listaBeneficios.push("50% dcto.");
-        else if (beneficios.descuento === 0.1) listaBeneficios.push("10% dcto.");
-        if (beneficios.tortaGratisCumple) listaBeneficios.push("Torta cumpleaños");
-        
-        return listaBeneficios.join(", ");
+    const resetForm = () => {
+        setNombre("");
+        setApellidos("");
+        setCorreo("");
+        setRegion("");
+        setComuna("");
+        setEdad("");
+        setEditingIndex(null);
     };
 
     return (
@@ -37,10 +75,18 @@ export default function Usuario() {
             <div className="usuarios-container">
                 <div className="usuarios-header">
                     <h2>Lista de Usuarios</h2>
-                    <Link to="/administrador/usuario/nuevo" className="btn-nuevo">
-                        + Crear Usuario Nuevo
-                    </Link>
                 </div>
+
+                <form onSubmit={editingIndex !== null ? actualizarUsuario : agregarUsuario}>
+                    <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre" required />
+                    <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} placeholder="Apellidos" required />
+                    <input type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder="Correo" required />
+                    <input type="text" value={region} onChange={(e) => setRegion(e.target.value)} placeholder="Región" required />
+                    <input type="text" value={comuna} onChange={(e) => setComuna(e.target.value)} placeholder="Comuna" required />
+                    <input type="number" value={edad} onChange={(e) => setEdad(e.target.value)} placeholder="Edad" required />
+                    <button type="submit">{editingIndex !== null ? 'Actualizar Usuario' : 'Agregar Usuario'}</button>
+                    {editingIndex !== null && <button type="button" onClick={resetForm}>Cancelar</button>}
+                </form>
 
                 <div id="lista-usuarios-admin">
                     {!usuarios.length ? (
@@ -56,7 +102,6 @@ export default function Usuario() {
                                         <th>Región</th>
                                         <th>Comuna</th>
                                         <th>Edad</th>
-                                        <th>Beneficios</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -69,8 +114,8 @@ export default function Usuario() {
                                             <td>{usuario.region}</td>
                                             <td>{usuario.comuna}</td>
                                             <td>{usuario.edad || ''}</td>
-                                            <td>{getBeneficios(usuario.beneficios)}</td>
                                             <td>
+                                                <button onClick={() => editarUsuario(idx)}>Editar</button>
                                                 <button 
                                                     className="btn-eliminar-usuario"
                                                     onClick={() => eliminarUsuario(idx)}

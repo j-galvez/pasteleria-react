@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import usuariosIniciales from './usuarios'; // Import the usuarios data
 
 export default function Admin() {
     const [seccionActiva, setSeccionActiva] = useState('productos');
@@ -18,11 +19,7 @@ export default function Admin() {
 
         // Inicializar usuarios si no existen
         if (!localStorage.getItem("usuarios")) {
-            const usuariosIniciales = [
-                { id: 1, nombre: "Jorge", email: "jorge@mail.com" },
-                { id: 2, nombre: "Ana", email: "ana@mail.com" }
-            ];
-            localStorage.setItem("usuarios", JSON.stringify(usuariosIniciales));
+            localStorage.setItem("usuarios", JSON.stringify(usuariosIniciales)); // Use imported data
         }
 
         // Cargar datos del localStorage
