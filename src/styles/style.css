@@ -53,46 +53,16 @@ h1 {
 }
 
 /* Tipografías Lato (para usar en HTML con sus respectivas clases) */
-.lato-thin {
-  font-weight: 100;
-  font-style: normal;
-}
-.lato-light {
-  font-weight: 300;
-  font-style: normal;
-}
-.lato-regular {
-  font-weight: 400;
-  font-style: normal;
-}
-.lato-bold {
-  font-weight: 700;
-  font-style: normal;
-}
-.lato-black {
-  font-weight: 900;
-  font-style: normal;
-}
-.lato-thin-italic {
-  font-weight: 100;
-  font-style: italic;
-}
-.lato-light-italic {
-  font-weight: 300;
-  font-style: italic;
-}
-.lato-regular-italic {
-  font-weight: 400;
-  font-style: italic;
-}
-.lato-bold-italic {
-  font-weight: 700;
-  font-style: italic;
-}
-.lato-black-italic {
-  font-weight: 900;
-  font-style: italic;
-}
+.lato-thin { font-weight: 100; font-style: normal; }
+.lato-light { font-weight: 300; font-style: normal; }
+.lato-regular { font-weight: 400; font-style: normal; }
+.lato-bold { font-weight: 700; font-style: normal; }
+.lato-black { font-weight: 900; font-style: normal; }
+.lato-thin-italic { font-weight: 100; font-style: italic; }
+.lato-light-italic { font-weight: 300; font-style: italic; }
+.lato-regular-italic { font-weight: 400; font-style: italic; }
+.lato-bold-italic { font-weight: 700; font-style: italic; }
+.lato-black-italic { font-weight: 900; font-style: italic; }
 
 /* =================================
    NAVEGACIÓN (Navbar)
@@ -121,14 +91,12 @@ h1 {
     margin:0;
     padding: 0;
 }
-/* Menú en catalogo.css y form.css */
 .navbar .menu a {
     margin: 0 10px;
     color: var(--clr-cafe);
     text-decoration: none;
 }
 
-/* Menú en style.css */
 ul li{
     position:relative;
 }
@@ -140,10 +108,10 @@ ul li a{
 }
 
 ul li a:hover,
-.navbar .menu a:hover { /* Hover para menú en catalogo/form */
+.navbar .menu a:hover {
     background: var(--clr-rosa-light);
     border-radius: 10%;
-    text-decoration: underline; /* De catalogo/form.css */
+    text-decoration: underline;
 }
 
 /* Dropdown */
@@ -250,7 +218,7 @@ ul li a:hover,
 .btn, .btn-pagar {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #e18787; /* Color específico en catalogo.css */
+    background-color: #e18787;
     color: white;
     border: none;
     border-radius: 8px;
@@ -261,7 +229,7 @@ ul li a:hover,
 }
 
 .btn:hover {
-    background-color: var(--clr-rosa); /* Mismo color de fondo */
+    background-color: var(--clr-rosa);
 }
 
 /* Botón pagar */
@@ -496,6 +464,11 @@ ul li a:hover,
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.form-container button[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .form-container button:hover {
@@ -883,4 +856,39 @@ header {
     height: 2.5rem;
     width: auto;
     display: block;
+}
+
+/* =================================
+   MODAL - Registro / Login éxito
+   ================================= */
+/* MODAL - Login éxito (moved from inline) */
+#login-success-modal,
+#registro-success-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+#login-success-modal .modal-content,
+#registro-success-modal .modal-content {
+  background: #fff;
+  padding: 20px 24px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 220px;
+  color: var(--clr-cafe);
+  font-weight: 600;
+}
+
+/* Responsive ajustes de formulario */
+@media (max-width: 480px) {
+  .form-container, .formulario {
+    width: 90%;
+    padding: 20px;
+  }
+  h1 { font-size: 2rem; }
 }
