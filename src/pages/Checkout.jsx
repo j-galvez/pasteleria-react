@@ -2,9 +2,11 @@ import React, { useState, useEffect, useMemo } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useCarrito } from "../context/CarritoContext.jsx";
 import "../utils/Carrito.logic.js";
+import { useNavigate } from "react-router-dom";
 
 export default function Checkout() {
   const { carrito } = useCarrito();
+  const navigate = useNavigate();
 
   // Get user and calculate discounts using CarritoLogic
   const usuario = window.CarritoLogic.obtenerUsuarioLogueado();
@@ -83,29 +85,26 @@ export default function Checkout() {
     setCliente((prev) => ({ ...prev, [name]: value }));
   };
 
+  // --- Simular compra ---
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 1. Crear el objeto de la venta
-    const nuevaVenta = {
-      id: Date.now(), // ID único basado en el timestamp
-      fecha: new Date().toLocaleString(),
-      cliente: { ...cliente },
-      carrito: [...carrito],
-      totalPagado: totalConDescuento,
-    };
+    // 50% chance de éxito o fallo
+    const esExito = Math.random() < 0.5;
 
-    // 2. Obtener ventas existentes y agregar la nueva
-    const ventasGuardadas = JSON.parse(localStorage.getItem("ventas")) || [];
-    ventasGuardadas.push(nuevaVenta);
+    // Simular código de orden
+    const codigoOrden = Math.floor(10000000 + Math.random() * 90000000);
 
-    // 3. Guardar el array actualizado en localStorage
-    localStorage.setItem("ventas", JSON.stringify(ventasGuardadas));
-
-    alert(
-      `✅ Compra realizada con éxito por ${cliente.nombre} ${cliente.apellidos}.\nTotal pagado: $${totalConDescuento.toLocaleString()}`
-    );
-    // Opcional: Redirigir o limpiar el carrito aquí
+    // Redirigir según resultado
+    if (esExito) {
+      navigate("/compra-exitosa", {
+        state: { cliente, carrito, totalConDescuento, codigoOrden },
+      });
+    } else {
+      navigate("/compra-fallida", {
+        state: { cliente, carrito, totalConDescuento, codigoOrden },
+      });
+    }
   };
 
   return (
