@@ -125,9 +125,9 @@ export default function Carrito() {
             )}
 
           <div style={{ textAlign: "right", marginTop: "20px" }}>
-            <a href="pago.html" className="btn-pagar">
+            <NavLink to="/checkout" className="btn btn-success">
               Ir a pagar
-            </a>
+            </NavLink>
           </div>
         </div>
       </div>
