@@ -1,5 +1,4 @@
 import React from "react";
-import { useCarrito } from '../components/Navbar';
 import mousse_chocolate from '../assets/postres/mousse_chocolate.webp';
 import tiramisu_clasico from '../assets/postres/tiramisu_clasico.webp';
 import cheescake_noazucar from '../assets/postres/cheescake_noazucar.webp';
@@ -10,7 +9,7 @@ import pan_nogluten from '../assets/postres/pan_nogluten.jpg';
 import galletas_avena from '../assets/postres/galletas_avena.webp';
 import '../utils/Postres.logic.js';
 import { useState } from 'react';
-
+import { useCarrito } from '../context/CarritoContext';
 
 export default function Postres() {
   const { agregarAlCarrito } = useCarrito();

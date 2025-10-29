@@ -1,6 +1,7 @@
 import React from "react";
-import { useCarrito } from "../components/Navbar";
+
 import "../utils/Carrito.logic.js"; // <-- Importa la lógica antes de usarla
+import { useCarrito } from '../context/CarritoContext';
 
 export default function Carrito() {
   const { carrito, eliminarDelCarrito, modificarCantidad } = useCarrito();
