@@ -20,6 +20,8 @@ import Producto from './pages/admin/Producto';
 import Usuario from './pages/admin/Usuario';
 import Admin from './pages/admin/Admin';
 import Checkout from './pages/Checkout';
+import CompraExitosa from "./pages/CompraExitosa";
+import CompraFallida from "./pages/CompraFallida";
 
 function AppContent() {
   const location = useLocation();
@@ -49,6 +51,8 @@ function AppContent() {
         <Route path="/blog2" element={<Blog2 />} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/compra-exitosa" element={<CompraExitosa />} />
+        <Route path="/compra-fallida" element={<CompraFallida />} />
         
         <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
       </Routes>
