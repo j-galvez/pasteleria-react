@@ -1,10 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+import { CarritoProvider } from './context/CarritoContext';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import './index.css';
 import './styles/style.css';
-import { CarritoProvider } from './components/Navbar';
+import './styles/navbarFooter.css';
+
 
 const link1 = document.createElement('link');
 link1.rel = 'preconnect';

@@ -3,7 +3,11 @@ config.set({
 frameworks: ['jasmine'],
 files: [
 'src/utils/**/*.js', // Incluye la lógica primero
-'src/**/*.spec.js' // Luego los archivos de prueba
+'src/**/*.spec.js', // Luego los archivos de prueba
+'src/utils/Login.logic.js',
+'src/utils/Login.logic.spec.js'
+
+
 ],
 reporters: ['spec'], // Reporter legible
 browsers: ['ChromeHeadless'], // Ejecuta en modo invisible

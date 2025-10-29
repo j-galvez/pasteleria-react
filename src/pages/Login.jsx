@@ -1,5 +1,9 @@
+
+import '../utils/Login.logic.js'; 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+
 
 export default function Login() {
   const [correo, setCorreo] = useState("");
@@ -8,22 +12,32 @@ export default function Login() {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    const usuario = usuarios.find(
-      (u) => u.correo === correo && u.password === password
-    );
 
-    if (usuario) {
-      localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
-      setSuccess(true);
-      setError(false);
-      setTimeout(() => navigate("/"), 1500);
-    } else {
-      setError(true);
-    }
+  const handleSubmit = (e) => {
+   
+    window.LoginLogic.handleSubmit(
+      e,
+      correo,
+      password,
+      {
+        obtenerUsuarios: function () {
+          try {
+            return JSON.parse(localStorage.getItem("usuarios")) || [];
+          } catch (ex) {
+            return [];
+          }
+        },
+        guardarUsuarioLogueado: function (usuario) {
+          try { localStorage.setItem("usuarioLogueado", JSON.stringify(usuario)); } catch (ex) {}
+        },
+        setSuccess: setSuccess,
+        setError: setError,
+        navigate: navigate,
+        timeoutFn: function (fn, ms) { return setTimeout(fn, ms); }
+      }
+    );
   };
+
 
   return (
     <main>
