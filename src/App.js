@@ -23,6 +23,12 @@ import Checkout from './pages/Checkout';
 import CompraExitosa from "./pages/CompraExitosa";
 import CompraFallida from "./pages/CompraFallida";
 
+import Ventas from './pages/admin/Ventas'; // Asegúrate que la ruta de importación sea correcta
+
+// ... dentro de tus <Routes>
+
+
+
 function AppContent() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/administrador');
@@ -35,6 +41,7 @@ function AppContent() {
         <Route path="/administrador" element={<Admin/>} />
         <Route path="/administrador/producto" element={<Producto />} />
         <Route path="/administrador/usuario" element={<Usuario />} />
+        <Route path="/administrador/ventas" element={<Ventas />} />
 
         {/* Public Routes */}
         <Route path="/" element={<Index/>} />
@@ -53,6 +60,7 @@ function AppContent() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/compra-exitosa" element={<CompraExitosa />} />
         <Route path="/compra-fallida" element={<CompraFallida />} />
+        
         
         <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
       </Routes>

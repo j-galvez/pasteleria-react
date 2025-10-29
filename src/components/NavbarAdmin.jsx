@@ -11,6 +11,7 @@ export default function NavbarAdmin() {
         <ul>
           <li><NavLink to="/administrador">Home Admin</NavLink></li>
           <li><NavLink to="/administrador/producto">Productos</NavLink></li>
+          <li><NavLink to="/administrador/ventas">Ventas</NavLink></li>
           <li><NavLink to="/administrador/usuario">Usuarios</NavLink></li>
           <li><NavLink to="/index">Salir</NavLink></li>
         </ul>
