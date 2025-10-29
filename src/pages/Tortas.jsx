@@ -1,6 +1,5 @@
 import React from 'react';
 // NavLink not used in this page
-import { useCarrito } from '../components/Navbar';
 import torta_chocolate from '../assets/tortas/torta_chocolate.webp';
 import fruta_tortawebp from '../assets/tortas/fruta_tortawebp.webp';
 import vainilla_circular from '../assets/tortas/vainilla_circular.webp';
@@ -10,6 +9,7 @@ import chocolate_vegan from '../assets/tortas/chocolate_vegan.webp';
 import cumpleanos_torta from '../assets/tortas/cumpleanos_torta.webp';
 import boda_torta from '../assets/tortas/boda_torta.webp'; 
 import '../utils/Tortas.logic.js'; 
+import { useCarrito } from '../context/CarritoContext';
 import { useState } from 'react';
 
 
