@@ -19,6 +19,7 @@ import Pago from './pages/Pago';
 import Producto from './pages/admin/Producto';
 import Usuario from './pages/admin/Usuario';
 import Admin from './pages/admin/Admin';
+import Checkout from './pages/Checkout';
 
 function AppContent() {
   const location = useLocation();
@@ -47,6 +48,7 @@ function AppContent() {
         <Route path="/blog1" element={<Blog1 />} />
         <Route path="/blog2" element={<Blog2 />} />
         <Route path="/contacto" element={<Contacto />} />
+        <Route path="/checkout" element={<Checkout />} />
         
         <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
       </Routes>

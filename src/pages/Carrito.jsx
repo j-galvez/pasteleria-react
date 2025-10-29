@@ -1,5 +1,6 @@
 import React from "react";
 import { useCarrito } from "../components/Navbar";
+import { NavLink } from "react-router-dom"; // Add this import
 import "../utils/Carrito.logic.js"; // <-- Importa la lógica antes de usarla
 
 export default function Carrito() {
@@ -124,9 +125,9 @@ export default function Carrito() {
             )}
 
           <div style={{ textAlign: "right", marginTop: "20px" }}>
-            <a href="pago.html" className="btn-pagar">
+            <NavLink to="/checkout" className="btn btn-success">
               Ir a pagar
-            </a>
+            </NavLink>
           </div>
         </div>
       </div>
