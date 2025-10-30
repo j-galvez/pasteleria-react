@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
+// importa la lógica externa (asegúrate de la ruta relativa correcta)
+import '../utils/Registro.logic.js';
 import { useNavigate } from "react-router-dom";
 
 export default function Registro() {
@@ -38,8 +40,10 @@ export default function Registro() {
     []
   );
 
-  // Comunas que corresponden a la región seleccionada
-  const comunasParaRegion = region ? regionesYComunas[region] || [] : [];
+  const comunasParaRegion = useMemo(() => {
+    return region ? window.RegistroLogic.comunasParaRegion(region) : [];
+  }, [region]);
+
 
   useEffect(() => {
     // Si la región cambia, reiniciar comuna seleccionada si no pertenece
@@ -91,158 +95,187 @@ export default function Registro() {
       beneficios,
     };
 
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    usuarios.push(usuario);
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+    const handleSubmit = (e) => {
+      e.preventDefault();
 
-    // Mostrar mensaje de éxito y redirigir a inicio
-    setSuccess(true);
-    setTimeout(() => navigate("/"), 1500);
-  };
+      // 1) Calcular edad usando la lógica externa
+      const edad = window.RegistroLogic.calcularEdad(fechaNac);
 
-  return (
-    <main>
-      <section className="form-container">
-        <h1>Registro de Usuario</h1>
-        <form id="formRegistro" onSubmit={handleSubmit}>
-          {/* RUN */}
-          <label htmlFor="run">RUN (sin puntos ni guion)</label>
-          <input
-            type="text"
-            id="run"
-            required
-            minLength={7}
-            maxLength={9}
-            placeholder="Ej: 19011022K"
-            value={run}
-            onChange={(e) => setRun(e.target.value)}
-          />
+      // 2) Determinar beneficios
+      const beneficios = window.RegistroLogic.determinarBeneficios(edad, codigo, correo);
 
-          {/* Nombre */}
-          <label htmlFor="nombre">Nombre</label>
-          <input
-            type="text"
-            id="nombre"
-            required
-            maxLength={50}
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
+      // 3) Construir objeto usuario
+      const usuario = window.RegistroLogic.buildUsuario({
+        run,
+        nombre,
+        apellidos,
+        correo,
+        password,
+        direccion,
+        region,
+        comuna,
+        fechaNac,
+        edad,
+        beneficios
+      });
 
-          {/* Apellidos */}
-          <label htmlFor="apellidos">Apellidos</label>
-          <input
-            type="text"
-            id="apellidos"
-            required
-            maxLength={100}
-            value={apellidos}
-            onChange={(e) => setApellidos(e.target.value)}
-          />
+      // 4) Guardar en localStorage (lógica externa)
+      const ok = window.RegistroLogic.guardarUsuarioLocal(usuario);
 
-          {/* Correo */}
-          <label htmlFor="correo">Correo</label>
-          <input
-            type="email"
-            id="correo"
-            required
-            maxLength={100}
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
-          />
+      // 5) UI: mostrar éxito y redirigir (igual que antes)
+      if (ok) {
+        setSuccess(true);
+        setTimeout(() => navigate('/'), 1500);
+      } else {
+        // manejar error (opcional): puedes setear un mensaje de error aquí
+        // ejemplo: setError("No se pudo guardar el usuario. Intente más tarde.");
+        console.error('Error guardando usuario');
+      }
+    };
 
-          {/* Contraseña */}
-          <label htmlFor="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            required
-            minLength={4}
-            maxLength={10}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+    return (
+      <main>
+        <section className="form-container">
+          <h1>Registro de Usuario</h1>
+          <form id="formRegistro" onSubmit={handleSubmit}>
+            {/* RUN */}
+            <label htmlFor="run">RUN (sin puntos ni guion)</label>
+            <input
+              type="text"
+              id="run"
+              required
+              minLength={7}
+              maxLength={9}
+              placeholder="Ej: 19011022K"
+              value={run}
+              onChange={(e) => setRun(e.target.value)}
+            />
 
-          {/* Dirección */}
-          <label htmlFor="direccion">Dirección</label>
-          <input
-            type="text"
-            id="direccion"
-            required
-            maxLength={300}
-            value={direccion}
-            onChange={(e) => setDireccion(e.target.value)}
-          />
+            {/* Nombre */}
+            <label htmlFor="nombre">Nombre</label>
+            <input
+              type="text"
+              id="nombre"
+              required
+              maxLength={50}
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+            />
 
-          {/* Región y comuna */}
-          <label htmlFor="region">Región</label>
-          <select
-            id="region"
-            required
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
+            {/* Apellidos */}
+            <label htmlFor="apellidos">Apellidos</label>
+            <input
+              type="text"
+              id="apellidos"
+              required
+              maxLength={100}
+              value={apellidos}
+              onChange={(e) => setApellidos(e.target.value)}
+            />
+
+            {/* Correo */}
+            <label htmlFor="correo">Correo</label>
+            <input
+              type="email"
+              id="correo"
+              required
+              maxLength={100}
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+            />
+
+            {/* Contraseña */}
+            <label htmlFor="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              required
+              minLength={4}
+              maxLength={10}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            {/* Dirección */}
+            <label htmlFor="direccion">Dirección</label>
+            <input
+              type="text"
+              id="direccion"
+              required
+              maxLength={300}
+              value={direccion}
+              onChange={(e) => setDireccion(e.target.value)}
+            />
+
+            {/* Región y comuna */}
+            <label htmlFor="region">Región</label>
+            <select
+              id="region"
+              required
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+            >
+              <option value="">Seleccione una región</option>
+              {Object.keys(window.RegistroLogic.obtenerRegionesYComunas()).map((r) => (
+                <option key={r} value={r}>{r}</option>
+              ))}
+
+            </select>
+
+            <label htmlFor="comuna">Comuna</label>
+            <select
+              id="comuna"
+              required
+              value={comuna}
+              onChange={(e) => setComuna(e.target.value)}
+            >
+              <option value="">Seleccione una comuna</option>
+              {comunasParaRegion.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+
+            {/* Fecha de nacimiento */}
+            <label htmlFor="fechaNac">Fecha de nacimiento</label>
+            <input
+              type="date"
+              id="fechaNac"
+              required
+              value={fechaNac}
+              onChange={(e) => setFechaNac(e.target.value)}
+            />
+
+            {/* Código */}
+            <label htmlFor="codigo">Código Descuento (Opcional)</label>
+            <input
+              type="text"
+              id="codigo"
+              maxLength={10}
+              value={codigo}
+              onChange={(e) => setCodigo(e.target.value)}
+            />
+
+            {/* Botón */}
+            <button type="submit" disabled={success}>
+              {success ? "Registrando..." : "Registrar"}
+            </button>
+          </form>
+        </section>
+
+        {success && (
+          <div
+            id="registro-success-modal"
+            role="status"
+            aria-live="polite"
           >
-            <option value="">Seleccione una región</option>
-            {Object.keys(regionesYComunas).map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-
-          <label htmlFor="comuna">Comuna</label>
-          <select
-            id="comuna"
-            required
-            value={comuna}
-            onChange={(e) => setComuna(e.target.value)}
-          >
-            <option value="">Seleccione una comuna</option>
-            {comunasParaRegion.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-
-          {/* Fecha de nacimiento */}
-          <label htmlFor="fechaNac">Fecha de nacimiento</label>
-          <input
-            type="date"
-            id="fechaNac"
-            required
-            value={fechaNac}
-            onChange={(e) => setFechaNac(e.target.value)}
-          />
-
-          {/* Código */}
-          <label htmlFor="codigo">Código Descuento (Opcional)</label>
-          <input
-            type="text"
-            id="codigo"
-            maxLength={10}
-            value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
-          />
-
-          {/* Botón */}
-          <button type="submit" disabled={success}>
-            {success ? "Registrando..." : "Registrar"}
-          </button>
-        </form>
-      </section>
-
-      {success && (
-        <div
-          id="registro-success-modal"
-          role="status"
-          aria-live="polite"
-        >
-          <div className="modal-content">
-            <p>Registro exitoso. Redirigiendo a inicio...</p>
+            <div className="modal-content">
+              <p>Registro exitoso. Redirigiendo a inicio...</p>
+            </div>
           </div>
-        </div>
-      )}
-    </main>
-  );
+        )}
+      </main>
+    );
+  }
 }

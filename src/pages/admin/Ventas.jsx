@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/style.css'; // Importamos los estilos para que se vea como el resto del admin
+import '../utils/Ventas.logic.js';
 
 export default function Ventas() {
     const [ventas, setVentas] = useState([]);
 
     useEffect(() => {
-        // Cargar las ventas desde localStorage al montar el componente
-        const ventasGuardadas = JSON.parse(localStorage.getItem("ventas")) || [];
+        const ventasGuardadas = window.VentasLogic.cargarVentasFromLocalStorage();
         setVentas(ventasGuardadas);
     }, []);
+
 
     return (
         <main className="content">
             <h1>Reporte de Ventas</h1>
-            <p>Total de ventas realizadas: {ventas.length}</p>
+            <p>Total de ventas realizadas: {window.VentasLogic.calcularTotalVentas(ventas)}</p>
+
 
             <div className="seccion">
                 <h2>Detalle de Ventas</h2>

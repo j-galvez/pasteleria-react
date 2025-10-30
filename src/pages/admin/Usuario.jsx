@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import '../utils/Usuario.logic.js';
+
 
 export default function Usuario() {
     const [usuarios, setUsuarios] = useState([]);
@@ -16,59 +18,93 @@ export default function Usuario() {
     }, []);
 
     const cargarUsuarios = () => {
-        const usuariosGuardados = JSON.parse(localStorage.getItem('usuarios')) || [];
+        const usuariosGuardados = window.UsuarioLogic.cargarUsuariosFromLocalStorage();
         setUsuarios(usuariosGuardados);
     };
 
+
     const agregarUsuario = (e) => {
         e.preventDefault();
-        const nuevosUsuarios = [...usuarios, { id: usuarios.length + 1, nombre, apellidos, correo, region, comuna, edad }];
-        localStorage.setItem('usuarios', JSON.stringify(nuevosUsuarios));
-        setUsuarios(nuevosUsuarios);
-        resetForm();
+        try {
+            const nuevosUsuarios = window.UsuarioLogic.agregarUsuario(usuarios, { nombre, apellidos, correo, region, comuna, edad });
+            window.UsuarioLogic.setLocalStorageUsuarios(nuevosUsuarios);
+            setUsuarios(nuevosUsuarios);
+            const reset = window.UsuarioLogic.resetFormData();
+            setNombre(reset.nombre);
+            setApellidos(reset.apellidos);
+            setCorreo(reset.correo);
+            setRegion(reset.region);
+            setComuna(reset.comuna);
+            setEdad(reset.edad);
+            setEditingIndex(reset.editingIndex);
+        } catch (error) {
+            // muestra el error en consola o maneja como quieras
+            console.error('Error agregando usuario:', error.message);
+            alert('Error al agregar usuario: ' + error.message);
+        }
     };
 
+
     const editarUsuario = (idx) => {
-        const usuario = usuarios[idx];
-        setNombre(usuario.nombre);
-        setApellidos(usuario.apellidos);
-        setCorreo(usuario.correo);
-        setRegion(usuario.region);
-        setComuna(usuario.comuna);
-        setEdad(usuario.edad);
+        const datos = window.UsuarioLogic.getUsuarioForEditing(usuarios, idx);
+        if (!datos) {
+            console.warn('Índice para editar inválido:', idx);
+            return;
+        }
+        setNombre(datos.nombre);
+        setApellidos(datos.apellidos);
+        setCorreo(datos.correo);
+        setRegion(datos.region);
+        setComuna(datos.comuna);
+        setEdad(datos.edad);
         setEditingIndex(idx);
     };
 
+
     const actualizarUsuario = (e) => {
         e.preventDefault();
-        const nuevosUsuarios = usuarios.map((usuario, idx) => {
-            if (idx === editingIndex) {
-                return { ...usuario, nombre, apellidos, correo, region, comuna, edad };
-            }
-            return usuario;
-        });
-        localStorage.setItem('usuarios', JSON.stringify(nuevosUsuarios));
-        setUsuarios(nuevosUsuarios);
-        resetForm();
+        try {
+            const nuevosUsuarios = window.UsuarioLogic.actualizarUsuario(usuarios, editingIndex, { nombre, apellidos, correo, region, comuna, edad });
+            window.UsuarioLogic.setLocalStorageUsuarios(nuevosUsuarios);
+            setUsuarios(nuevosUsuarios);
+            const reset = window.UsuarioLogic.resetFormData();
+            setNombre(reset.nombre);
+            setApellidos(reset.apellidos);
+            setCorreo(reset.correo);
+            setRegion(reset.region);
+            setComuna(reset.comuna);
+            setEdad(reset.edad);
+            setEditingIndex(reset.editingIndex);
+        } catch (err) {
+            console.error('Error al actualizar:', err.message);
+            alert('Error al actualizar: ' + err.message);
+        }
     };
 
+
     const eliminarUsuario = (idx) => {
-        if (window.confirm("¿Seguro que deseas eliminar este usuario?")) {
-            const nuevosUsuarios = usuarios.filter((_, index) => index !== idx);
-            localStorage.setItem('usuarios', JSON.stringify(nuevosUsuarios));
+        if (!window.confirm('¿Seguro que deseas eliminar este usuario?')) return;
+        try {
+            const nuevosUsuarios = window.UsuarioLogic.eliminarUsuarioByIndex(usuarios, idx);
+            window.UsuarioLogic.setLocalStorageUsuarios(nuevosUsuarios);
             setUsuarios(nuevosUsuarios);
+        } catch (err) {
+            console.error('Error al eliminar usuario:', err.message);
+            alert('Error al eliminar: ' + err.message);
         }
     };
 
     const resetForm = () => {
-        setNombre("");
-        setApellidos("");
-        setCorreo("");
-        setRegion("");
-        setComuna("");
-        setEdad("");
-        setEditingIndex(null);
+        const reset = window.UsuarioLogic.resetFormData();
+        setNombre(reset.nombre);
+        setApellidos(reset.apellidos);
+        setCorreo(reset.correo);
+        setRegion(reset.region);
+        setComuna(reset.comuna);
+        setEdad(reset.edad);
+        setEditingIndex(reset.editingIndex);
     };
+
 
     return (
         <main>
@@ -116,7 +152,7 @@ export default function Usuario() {
                                             <td>{usuario.edad || ''}</td>
                                             <td>
                                                 <button onClick={() => editarUsuario(idx)}>Editar</button>
-                                                <button 
+                                                <button
                                                     className="btn-eliminar-usuario"
                                                     onClick={() => eliminarUsuario(idx)}
                                                 >
