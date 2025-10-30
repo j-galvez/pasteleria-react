@@ -15,6 +15,8 @@ import tarta_santiago from '../../assets/postres/tarta_santiago.webp';
 import brownie from '../../assets/postres/brownie.webp';
 import pan_nogluten from '../../assets/postres/pan_nogluten.jpg';
 import galletas_avena from '../../assets/postres/galletas_avena.webp';
+import '../utils/Producto.logic.js';
+
 
 // Datos iniciales de productos — usar las variables (rutas), no elementos JSX
 const productosIniciales = [
@@ -48,21 +50,21 @@ export default function Producto() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData(prev => window.ProductoLogic.actualizarFormData(prev, name, value));
     };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (editingId !== null) {
-            setProductos(prev => prev.map((prod, idx) => idx === editingId ? { ...formData, precio: Number(formData.precio) } : prod));
+            setProductos(prev => window.ProductoLogic.editarProducto(prev, formData, editingId));
             setEditingId(null);
         } else {
-            // Si el usuario ingresó una ruta absoluta/relativa dejarla, si no usar placeholder
-            const imagenValue = formData.imagen ? formData.imagen : '/img/placeholder.png';
-            setProductos(prev => [...prev, { ...formData, precio: Number(formData.precio), imagen: imagenValue }]);
+            setProductos(prev => window.ProductoLogic.agregarProducto(prev, formData));
         }
-        setFormData({ categoria: '', nombre: '', precio: '', imagen: '' });
+        setFormData(window.ProductoLogic.limpiarForm());
     };
+
 
     const handleEdit = (index) => {
         setFormData(productos[index]);
@@ -70,8 +72,9 @@ export default function Producto() {
     };
 
     const handleDelete = (index) => {
-        setProductos(prev => prev.filter((_, idx) => idx !== index));
+        setProductos(prev => window.ProductoLogic.eliminarProducto(prev, index));
     };
+
 
     return (
         <main className="admin-productos" id="admin-productos">
