@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../utils/Usuario.logic.js';
+import '../../utils/Usuario.logic.js';
 
 
 export default function Usuario() {

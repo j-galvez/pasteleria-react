@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import usuariosIniciales from './usuarios'; // Import the usuarios data
 
 
+
 export default function Admin() {
     const [seccionActiva, setSeccionActiva] = useState('productos');
     const [productos, setProductos] = useState([]);

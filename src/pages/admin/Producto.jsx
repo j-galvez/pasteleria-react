@@ -15,7 +15,7 @@ import tarta_santiago from '../../assets/postres/tarta_santiago.webp';
 import brownie from '../../assets/postres/brownie.webp';
 import pan_nogluten from '../../assets/postres/pan_nogluten.jpg';
 import galletas_avena from '../../assets/postres/galletas_avena.webp';
-import '../utils/Producto.logic.js';
+import '../../utils/Producto.logic.js'
 
 
 // Datos iniciales de productos — usar las variables (rutas), no elementos JSX

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/style.css'; // Importamos los estilos para que se vea como el resto del admin
-import '../utils/Ventas.logic.js';
+import '../../utils/Ventas.logic.js';
 
 export default function Ventas() {
     const [ventas, setVentas] = useState([]);
