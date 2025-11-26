@@ -35,8 +35,8 @@ export default function Index() {
             <img src={torta_chocolate} alt="Producto"/>
             <h3>Torta Cuadrada de Chocolate</h3>
             <div className="info">
-                <span class="atributos">Atributos</span>
-                <span class="precio">$45.000</span>
+                <span className="atributos">Atributos</span>
+                <span className="precio">$45.000</span>
             </div>
         </div>
         <div className="card">
@@ -50,7 +50,7 @@ export default function Index() {
         <div className="card">
             <img src={brownie} alt="Producto"/>
             <h3>Brownie Sin Gluten</h3>
-            <div class="info">
+            <div className="info">
                 <span className="atributos">Atributos</span>
                 <span className="precio">$4.000</span>
             </div>
@@ -90,7 +90,7 @@ export default function Index() {
         <div className="card">
             <img src={mousse_chocolate} alt="Producto"/>
             <h3>Mousse Chocolate</h3>
-            <div class="info">
+            <div className="info">
                 <span className="atributos">Atributos</span>
                 <span className="precio">$5.000</span>
             </div>
