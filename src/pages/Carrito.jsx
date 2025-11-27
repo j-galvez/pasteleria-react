@@ -51,7 +51,7 @@ export default function Carrito() {
                   return (
                     <tr key={p.nombre}>
                       <td>{p.nombre}</td>
-                      <td>${precio.toLocaleString()}</td>
+                      <td>${!isNaN(precio) ? precio.toLocaleString() : '0'}</td>
                       <td>
                         <input
                           type="number"

@@ -3,6 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useCarrito } from "../context/CarritoContext.jsx";
 import "../utils/Carrito.logic.js";
 import { useNavigate } from "react-router-dom";
+import { createPedido } from "../services/pedidoService";
+
 
 export default function Checkout() {
   const { carrito } = useCarrito();
@@ -86,25 +88,39 @@ export default function Checkout() {
   };
 
   // --- Simular compra ---
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 50% chance de éxito o fallo
-    const esExito = Math.random() < 0.5;
+     const usuarioLogueado = JSON.parse(localStorage.getItem("usuarioLogueado"));
 
-    // Simular código de orden
-    const codigoOrden = Math.floor(10000000 + Math.random() * 90000000);
+  const pedido = {
+    usuario: { run: usuarioLogueado.run },
+    total: totalConDescuento,
+    detalles: carrito.map((item) => ({
+      producto: { id: item.id },        // DEBE existir item.id
+      cantidad: item.cantidad,
+      subtotal: item.precio * item.cantidad
+    }))
+  };
 
-    // Redirigir según resultado
-    if (esExito) {
-      navigate("/compra-exitosa", {
-        state: { cliente, carrito, totalConDescuento, codigoOrden },
-      });
-    } else {
-      navigate("/compra-fallida", {
-        state: { cliente, carrito, totalConDescuento, codigoOrden },
-      });
-    }
+  try {
+    const pedidoGuardado = await createPedido(pedido);
+
+    localStorage.removeItem("carrito");
+
+    navigate("/compra-exitosa", {
+      state: {
+        cliente,
+        carrito,
+        totalConDescuento,
+        codigoOrden: pedidoGuardado.idPedido
+      },
+    });
+
+  } catch (error) {
+    console.log("ERROR ENVIANDO PEDIDO:", error);
+    alert("Error al crear el pedido");
+  }
   };
 
   return (
@@ -141,14 +157,14 @@ export default function Checkout() {
                 </thead>
                 <tbody>
                   {carrito.map((item, i) => {
-                    const subtotal = item.precio * item.cantidad;
+                    const subtotal = (item.precio || 0) * (item.cantidad || 0);
                     const subtotalConDescuento = descuento > 0 ? subtotal * (1 - descuento) : subtotal;
 
                     return (
                       <tr key={i}>
                         <td>{item.nombre}</td>
-                        <td>${item.precio.toLocaleString()}</td>
-                        <td>{item.cantidad}</td>
+                        <td>${(item.precio || 0).toLocaleString()}</td>
+                        <td>{item.cantidad || 0}</td>
                         <td>
                           {descuento > 0 ? (
                             <>
@@ -306,7 +322,7 @@ export default function Checkout() {
 
             <div className="text-end mt-4">
               <button type="submit" className="btn btn-success btn-lg">
-                Pagar ahora ${totalConDescuento.toLocaleString()}
+                Pagar ahora ${(totalConDescuento || 0).toLocaleString()}
               </button>
             </div>
           </form>

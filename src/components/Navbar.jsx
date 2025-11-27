@@ -86,11 +86,11 @@ export default function Navbar(){
                         <div>
                           <strong>{item.nombre}</strong> <br />
                           <small>
-                            ${item.precio.toLocaleString()} x {item.cantidad}
+                            ${(item.precio || 0).toLocaleString()} x {item.cantidad || 0}
                           </small>
                         </div>
                         <span className="badge bg-secondary">
-                          ${(item.precio * item.cantidad).toLocaleString()}
+                          ${((item.precio || 0) * (item.cantidad || 0)).toLocaleString()}
                         </span>
                       </div>
                     </li>
@@ -117,18 +117,3 @@ export default function Navbar(){
         </nav>
     );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
