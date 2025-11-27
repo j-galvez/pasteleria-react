@@ -11,7 +11,7 @@ export default function CompraExitosa() {
       <div className="card shadow">
         <div className="card-body">
           <h3 className="text-success mb-3">
-            ✅ Se ha realizado la compra. nro #{codigoOrden}
+            ✅ Se ha realizado la compra. nro #{state.codigoOrden}
           </h3>
           <p>Completa la siguiente información</p>
 
@@ -35,15 +35,15 @@ export default function CompraExitosa() {
               {carrito?.map((item, i) => (
                 <tr key={i}>
                   <td>{item.nombre}</td>
-                  <td>${item.precio.toLocaleString()}</td>
-                  <td>{item.cantidad}</td>
-                  <td>${(item.precio * item.cantidad).toLocaleString()}</td>
+                  <td>${(item.precio || 0).toLocaleString()}</td>
+                  <td>{item.cantidad || 0}</td>
+                  <td>${((item.precio || 0) * (item.cantidad || 0)).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          <h4 className="text-end mt-4">Total pagado: ${totalConDescuento.toLocaleString()}</h4>
+          <h4 className="text-end mt-4">Total pagado: ${(totalConDescuento || 0).toLocaleString()}</h4>
 
           <div className="d-flex justify-content-end mt-4 gap-2">
             <button className="btn btn-danger">Imprimir boleta en PDF</button>

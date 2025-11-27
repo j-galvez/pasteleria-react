@@ -34,15 +34,15 @@ export default function CompraFallida() {
               {carrito?.map((item, i) => (
                 <tr key={i}>
                   <td>{item.nombre}</td>
-                  <td>${item.precio.toLocaleString()}</td>
-                  <td>{item.cantidad}</td>
-                  <td>${(item.precio * item.cantidad).toLocaleString()}</td>
+                  <td>${(item.precio || 0).toLocaleString()}</td>
+                  <td>{item.cantidad || 0}</td>
+                  <td>${((item.precio || 0) * (item.cantidad || 0)).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          <h4 className="text-end mt-4">Total a pagar: ${totalConDescuento.toLocaleString()}</h4>
+          <h4 className="text-end mt-4">Total a pagar: ${(totalConDescuento || 0).toLocaleString()}</h4>
         </div>
       </div>
     </main>

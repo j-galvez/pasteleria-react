@@ -31,8 +31,7 @@ export default function Tortas() {
                     <h2>Torta Cuadrada Chocolate</h2>
                     <p className="precio">$45.000</p>
                   <button
-                      className="btn" onClick={() => window.TortasLogic.agregarTortaAlCarrito
-                      (agregarAlCarrito, 'Torta Cuadrada Chocolate', 45000)}>Agregar</button>
+                      className="btn" onClick={() => agregarAlCarrito({ id: 'torta-chocolate', nombre: 'Torta Cuadrada Chocolate', precio: 45000 })}>Agregar</button>
 
                    <button
                       className="btn detalle-btn" onClick={() => toggleDetalle('Torta de Chocolate')}>
@@ -51,8 +50,7 @@ export default function Tortas() {
                     <h2>Torta Cuadrada Frutas</h2>
                     <p className="precio">$50.000</p> 
                     <button
-                      className="btn" onClick={() => window.TortasLogic.agregarTortaAlCarrito
-                      (agregarAlCarrito, 'Torta de Frutas', 50000)}>Agregar</button>
+                      className="btn" onClick={() => agregarAlCarrito({ id: 'torta-frutas', nombre: 'Torta Cuadrada Frutas', precio: 50000 })}>Agregar</button>
 
                     <button
                       className="btn detalle-btn" onClick={() => toggleDetalle('Torta de Frutas')}>
@@ -70,8 +68,7 @@ export default function Tortas() {
                     <h2>Torta Circular Vainilla</h2>
                     <p className="precio">$40.000</p>
                     <button
-                      className="btn" onClick={() => window.TortasLogic.agregarTortaAlCarrito
-                      (agregarAlCarrito, 'Torta de Frutas', 50000)}>Agregar</button>
+                      className="btn" onClick={() => agregarAlCarrito({ id: 'torta-vainilla', nombre: 'Torta Circular Vainilla', precio: 40000 })}>Agregar</button>
 
                     <button
                       className="btn detalle-btn" onClick={() => toggleDetalle('Torta Vainilla')}>
@@ -90,8 +87,7 @@ export default function Tortas() {
                     <p className="precio">$42.000</p>
 
                     <button
-                      className="btn" onClick={() => window.TortasLogic.agregarTortaAlCarrito
-                      (agregarAlCarrito, 'Torta Circular Manjar', 42000)}>Agregar</button>
+                      className="btn" onClick={() => agregarAlCarrito({ id: 'torta-manjar', nombre: 'Torta Circular Manjar', precio: 42000 })}>Agregar</button>
 
 
                       <button
@@ -112,8 +108,7 @@ export default function Tortas() {
                     <p className="precio">$48.000</p>
 
                     <button
-                      className="btn" onClick={() => window.TortasLogic.agregarTortaAlCarrito
-                      (agregarAlCarrito, 'Torta Sin Azucar Naranja', 48000)}>Agregar</button>
+                      className="btn" onClick={() => agregarAlCarrito({ id: 'torta-naranja', nombre: 'Torta Sin Azucar Naranja', precio: 48000 })}>Agregar</button>
 
                      <button
                       className="btn detalle-btn" onClick={() => toggleDetalle('Torta Sin Azucar Naranja')}>
@@ -133,8 +128,7 @@ export default function Tortas() {
                     <p className="precio">$50.000</p>
 
                     <button
-                      className="btn" onClick={() => window.TortasLogic.agregarTortaAlCarrito
-                      (agregarAlCarrito, 'Torta Vegana Chocolate', 50000)}>Agregar</button>
+                      className="btn" onClick={() => agregarAlCarrito({ id: 'torta-vegana-choco', nombre: 'Torta Vegana Chocolate', precio: 50000 })}>Agregar</button>
 
 
                       <button
@@ -155,8 +149,7 @@ export default function Tortas() {
                     <p className="precio">$55.000</p>
 
                     <button
-                      className="btn" onClick={() => window.TortasLogic.agregarTortaAlCarrito
-                      (agregarAlCarrito, 'Torta Especial Cumpleaños', 55000)}>Agregar</button>
+                      className="btn" onClick={() => agregarAlCarrito({ id: 'torta-cumpleanos', nombre: 'Torta Especial Cumpleaños', precio: 55000 })}>Agregar</button>
 
                      <button
                       className="btn detalle-btn" onClick={() => toggleDetalle('Torta Especial Cumpleaños')}>
@@ -174,8 +167,7 @@ export default function Tortas() {
                     <h2>Torta Especial Boda</h2>
                     <p className="precio">$60.000</p>
                     <button
-                      className="btn" onClick={() => window.TortasLogic.agregarTortaAlCarrito
-                      (agregarAlCarrito, 'Torta Especial de Boda', 60000)}>Agregar</button>
+                      className="btn" onClick={() => agregarAlCarrito({ id: 'torta-boda', nombre: 'Torta Especial Boda', precio: 60000 })}>Agregar</button>
 
                        <button
                       className="btn detalle-btn" onClick={() => toggleDetalle('Torta Especial Boda')}>
