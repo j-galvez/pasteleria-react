@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
 
-
 export const CarritoContext = createContext();
 
 export function useCarrito() {
@@ -16,27 +15,37 @@ export function CarritoProvider({ children }) {
     localStorage.setItem("carrito", JSON.stringify(carrito));
   }, [carrito]);
 
-  const agregarAlCarrito = (nombre, precio) => {
+  // ✅ Ahora agregarAlCarrito recibe el OBJETO producto completo
+  const agregarAlCarrito = (producto) => {
+    const item = {
+      id: producto.id,
+      nombre: producto.nombre || producto.nombre_producto,
+      precio: Number(producto.precio),
+      cantidad: 1,
+    };
+
     setCarrito((prev) => {
-      const existe = prev.find((p) => p.nombre === nombre);
+      const existe = prev.find((p) => p.id === item.id);
+
       if (existe) {
         return prev.map((p) =>
-          p.nombre === nombre ? { ...p, cantidad: p.cantidad + 1 } : p
+          p.id === item.id ? { ...p, cantidad: p.cantidad + 1 } : p
         );
       }
-      return [...prev, { nombre, precio, cantidad: 1 }];
+
+      return [...prev, item];
     });
   };
 
-  const eliminarDelCarrito = (nombre) => {
-    setCarrito((prev) => prev.filter((p) => p.nombre !== nombre));
+  const eliminarDelCarrito = (id) => {
+    setCarrito((prev) => prev.filter((p) => p.id !== id));
   };
 
-  const modificarCantidad = (nombre, cantidad) => {
+  const modificarCantidad = (id, cantidad) => {
     setCarrito((prev) =>
       prev
         .map((p) =>
-          p.nombre === nombre ? { ...p, cantidad: parseInt(cantidad) } : p
+          p.id === id ? { ...p, cantidad: parseInt(cantidad) } : p
         )
         .filter((p) => p.cantidad > 0)
     );
