@@ -89,15 +89,21 @@ export default function Checkout() {
 
   // --- Simular compra ---
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-     const usuarioLogueado = JSON.parse(localStorage.getItem("usuarioLogueado"));
+  const usuarioLogueado = JSON.parse(localStorage.getItem("usuarioLogueado"));
+
+  if (!usuarioLogueado || !usuarioLogueado.run) {
+    alert("Debes iniciar sesión antes de pagar.");
+    navigate("/login");
+    return;
+  }
 
   const pedido = {
     usuario: { run: usuarioLogueado.run },
     total: totalConDescuento,
     detalles: carrito.map((item) => ({
-      producto: { id: item.id },        // DEBE existir item.id
+      producto: { id: item.id },
       cantidad: item.cantidad,
       subtotal: item.precio * item.cantidad
     }))
@@ -121,7 +127,7 @@ export default function Checkout() {
     console.log("ERROR ENVIANDO PEDIDO:", error);
     alert("Error al crear el pedido");
   }
-  };
+};
 
   return (
     <main className="container my-4">
