@@ -37,7 +37,6 @@ export const imagenesProductos = {
     14: naranja_torta,
     15: torta_chocolate,
     16: vainilla_circular,
-    17: default_producto,
 };
 
 export const imagenPorDefecto = default_producto;
