@@ -49,9 +49,9 @@ export default function Carrito() {
                       : 0;
 
                   return (
-                    <tr key={p.nombre}>
-                      <td>{p.nombre}</td>
-                      <td>${precio.toLocaleString()}</td>
+                    <tr key={p.id}>
+                      <td>{p.id}</td>
+                      <td>${!isNaN(precio) ? precio.toLocaleString() : '0'}</td>
                       <td>
                         <input
                           type="number"
@@ -59,14 +59,14 @@ export default function Carrito() {
                           value={p.cantidad}
                           style={{ width: 60 }}
                           onChange={(e) =>
-                            modificarCantidad(p.nombre, e.target.value)
+                            modificarCantidad(p.id, e.target.value)
                           }
                         />
                       </td>
                       <td>${subtotal.toLocaleString()}</td>
                       <td>
                         <button
-                          onClick={() => eliminarDelCarrito(p.nombre)}
+                          onClick={() => eliminarDelCarrito(p.id)}
                           title="Eliminar"
                           style={{
                             background: "none",
