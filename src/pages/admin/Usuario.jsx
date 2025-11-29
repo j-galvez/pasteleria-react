@@ -101,6 +101,9 @@ export default function Usuario() {
     await cargarUsuarios();
   };
 
+  // 💗 padding para mejorar placeholder y espacio de escritura
+  const inputStyle = { padding: "6px 6px", fontSize: "15px" };
+
   return (
     <main>
       <div className="usuarios-container">
@@ -108,16 +111,16 @@ export default function Usuario() {
 
         {/* FORMULARIO */}
         <form onSubmit={modoEdicion ? actualizarUsuarioHandler : agregarUsuarioHandler}>
-          <input placeholder="RUN" value={run} onChange={(e) => setRun(e.target.value)} required />
-          <input placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
-          <input placeholder="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} required />
-          <input type="email" placeholder="Correo" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
-          <input placeholder="Región" value={region} onChange={(e) => setRegion(e.target.value)} required />
-          <input placeholder="Comuna" value={comuna} onChange={(e) => setComuna(e.target.value)} required />
-          <input type="date" value={fechaNac} onChange={(e) => setFechaNac(e.target.value)} required />
-          <input placeholder="Dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} required />
-          <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <input placeholder="Código (opcional)" value={codigo} onChange={(e) => setCodigo(e.target.value)} />
+          <input style={inputStyle} placeholder="RUN" value={run} onChange={(e) => setRun(e.target.value)} required />
+          <input style={inputStyle} placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+          <input style={inputStyle} placeholder="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} required />
+          <input style={inputStyle} type="email" placeholder="Correo" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
+          <input style={inputStyle} placeholder="Región" value={region} onChange={(e) => setRegion(e.target.value)} required />
+          <input style={inputStyle} placeholder="Comuna" value={comuna} onChange={(e) => setComuna(e.target.value)} required />
+          <input style={inputStyle} type="date" value={fechaNac} onChange={(e) => setFechaNac(e.target.value)} required />
+          <input style={inputStyle} placeholder="Dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} required />
+          <input style={inputStyle} type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input style={inputStyle} placeholder="Código (opcional)" value={codigo} onChange={(e) => setCodigo(e.target.value)} />
 
           <button type="submit">
             {modoEdicion ? "Actualizar Usuario" : "Agregar Usuario"}
