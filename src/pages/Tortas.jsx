@@ -22,7 +22,7 @@ export default function Postres() {
 
     return (
         <main className="container py-4">
-            <h1 className="mb-4">Nuestros Postres</h1>
+            <h1 className="mb-4">Nuestras Tortas</h1>
 
             <div className="d-flex flex-wrap gap-3">
                 {productos.map((producto) => (

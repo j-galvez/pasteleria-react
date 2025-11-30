@@ -1,137 +1,162 @@
 import React, { useState, useEffect } from 'react';
-import torta_chocolate from '../../assets/tortas/torta_chocolate.webp';
-import fruta_tortawebp from '../../assets/tortas/fruta_tortawebp.webp';
-import vainilla_circular from '../../assets/tortas/vainilla_circular.webp';
-import manjar_redondawebp from '../../assets/tortas/manjar_redondawebp.webp';
-import naranja_torta from '../../assets/tortas/naranja_torta.webp';
-import chocolate_vegan from '../../assets/tortas/chocolate_vegan.webp';
-import cumpleanos_torta from '../../assets/tortas/cumpleanos_torta.webp';
-import boda_torta from '../../assets/tortas/boda_torta.webp';
-import mousse_chocolate from '../../assets/postres/mousse_chocolate.webp';
-import tiramisu_clasico from '../../assets/postres/tiramisu_clasico.webp';
-import cheescake_noazucar from '../../assets/postres/cheescake_noazucar.webp';
-import empanada_manzana from '../../assets/postres/empanada_manzana.webp';
-import tarta_santiago from '../../assets/postres/tarta_santiago.webp';
-import brownie from '../../assets/postres/brownie.webp';
-import pan_nogluten from '../../assets/postres/pan_nogluten.jpg';
-import galletas_avena from '../../assets/postres/galletas_avena.webp';
-import '../../utils/Producto.logic.js'
-
-
-// Datos iniciales de productos — usar las variables (rutas), no elementos JSX
-const productosIniciales = [
-    { categoria: "Tortas", nombre: "Torta Cuadrada Chocolate", precio: 45000, imagen: torta_chocolate },
-    { categoria: "Tortas", nombre: "Torta Cuadrada Frutas", precio: 50000, imagen: fruta_tortawebp },
-    { categoria: "Tortas", nombre: "Torta Circular Vainilla", precio: 40000, imagen: vainilla_circular },
-    { categoria: "Tortas", nombre: "Torta Circular Manjar", precio: 42000, imagen: manjar_redondawebp },
-    { categoria: "Tortas", nombre: "Torta Sin Azucar Naranja", precio: 48000, imagen: naranja_torta },
-    { categoria: "Tortas", nombre: "Torta Vegana Chocolate", precio: 50000, imagen: chocolate_vegan },
-    { categoria: "Tortas", nombre: "Torta Especial Cumpleaños", precio: 55000, imagen: cumpleanos_torta },
-    { categoria: "Tortas", nombre: "Torta Especial Boda", precio: 60000, imagen: boda_torta },
-
-    { categoria: "Postres", nombre: "Mousse Chocolate", precio: 5000, imagen: mousse_chocolate },
-    { categoria: "Postres", nombre: "Tiramisú Clásico", precio: 5500, imagen: tiramisu_clasico },
-    { categoria: "Postres", nombre: "Cheesecake Sin Azúcar", precio: 47000, imagen: cheescake_noazucar },
-    { categoria: "Postres", nombre: "Empanada de Manzana", precio: 3000, imagen: empanada_manzana },
-    { categoria: "Postres", nombre: "Tarta Santiago", precio: 6000, imagen: tarta_santiago },
-    { categoria: "Postres", nombre: "Brownie Sin Gluten", precio: 4000, imagen: brownie },
-    { categoria: "Postres", nombre: "Pan Sin Gluten", precio: 3500, imagen: pan_nogluten },
-    { categoria: "Postres", nombre: "Galletas Veganas de Avena", precio: 4000, imagen: galletas_avena }
-];
+import '../../utils/Producto.logic.js';
 
 export default function Producto() {
-    const [productos, setProductos] = useState(productosIniciales);
-    const [formData, setFormData] = useState({ categoria: '', nombre: '', precio: '', imagen: '' });
-    const [editingId, setEditingId] = useState(null);
+    const [productos, setProductos] = useState([]);
+    const [formData, setFormData] = useState({
+        id: null,
+        nombre_producto: "",
+        precio: "",
+        descripcion: "",
+        categoria: ""
+    });
 
+    // ============================
+    // 🔹 1) Cargar productos desde la BD
+    // ============================
     useEffect(() => {
-        console.log('Productos cargados:', productos);
-    }, [productos]);
+        fetch("http://localhost:8080/api/productos")
+            .then(res => res.json())
+            .then(data => {
+                setProductos(data);
+                console.log("Productos cargados desde la BD:", data);
+            })
+            .catch(err => console.error("Error cargando productos:", err));
+    }, []);
 
+    // ============================
+    // 🔹 2) Actualizar formulario
+    // ============================
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => window.ProductoLogic.actualizarFormData(prev, name, value));
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-
-    const handleSubmit = (e) => {
+    // ============================
+    // 🔹 3) Guardar o actualizar producto
+    // ============================
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (editingId !== null) {
-            setProductos(prev => window.ProductoLogic.editarProducto(prev, formData, editingId));
-            setEditingId(null);
+
+        const requestOptions = {
+            method: formData.id ? "PUT" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        };
+
+        const url = formData.id
+            ? `http://localhost:8080/api/productos/${formData.id}`
+            : "http://localhost:8080/api/productos";
+
+        const res = await fetch(url, requestOptions);
+        const data = await res.json();
+
+        if (formData.id) {
+            // actualizar lista
+            setProductos(prev =>
+                prev.map(p => p.id === formData.id ? data : p)
+            );
         } else {
-            setProductos(prev => window.ProductoLogic.agregarProducto(prev, formData));
+            // agregar nuevo producto
+            setProductos(prev => [...prev, data]);
         }
-        setFormData(window.ProductoLogic.limpiarForm());
+
+        // limpiar formulario
+        setFormData({
+            id: null,
+            nombre_producto: "",
+            precio: "",
+            descripcion: "",
+            categoria: ""
+        });
     };
 
-
-    const handleEdit = (index) => {
-        setFormData(productos[index]);
-        setEditingId(index);
+    // ============================
+    // 🔹 4) Editar producto
+    // ============================
+    const handleEdit = (producto) => {
+        setFormData({ ...producto });
     };
 
-    const handleDelete = (index) => {
-        setProductos(prev => window.ProductoLogic.eliminarProducto(prev, index));
-    };
+    // ============================
+    // 🔹 5) Eliminar producto
+    // ============================
+    const handleDelete = async (id) => {
+        await fetch(`http://localhost:8080/api/productos/${id}`, {
+            method: "DELETE"
+        });
 
+        setProductos(prev => prev.filter(p => p.id !== id));
+    };
 
     return (
         <main className="admin-productos" id="admin-productos">
             <h1>Gestión de Productos</h1>
             <p>Total productos: {productos.length}</p>
 
+            {/* FORMULARIO */}
             <form onSubmit={handleSubmit} className="producto-form">
                 <select name="categoria" value={formData.categoria} onChange={handleInputChange} required>
                     <option value="">Seleccione categoría</option>
-                    <option value="Tortas">Tortas</option>
-                    <option value="Postres">Postres</option>
+                    <option value="Torta">Torta</option>
+                    <option value="Postre">Postre</option>
                 </select>
 
-                <input type="text" name="nombre" placeholder="Nombre del producto" value={formData.nombre} onChange={handleInputChange} required />
-                <input type="number" name="precio" placeholder="Precio" value={formData.precio} onChange={handleInputChange} required />
-                <input type="text" name="imagen" placeholder="URL de la imagen (opcional)" value={formData.imagen} onChange={handleInputChange} />
+                <input type="text"
+                       name="nombre_producto"
+                       placeholder="Nombre del producto"
+                       value={formData.nombre_producto}
+                       onChange={handleInputChange}
+                       required />
 
-                <button type="submit">{editingId !== null ? 'Actualizar Producto' : 'Agregar Producto'}</button>
+                <input type="number"
+                       name="precio"
+                       placeholder="Precio"
+                       value={formData.precio}
+                       onChange={handleInputChange}
+                       required />
+
+                <input type="text"
+                       name="descripcion"
+                       placeholder="Descripción"
+                       value={formData.descripcion}
+                       onChange={handleInputChange}
+                       required />
+
+                <button type="submit">
+                    {formData.id ? "Actualizar Producto" : "Agregar Producto"}
+                </button>
             </form>
 
+            {/* TABLA */}
             <div className="productos-lista">
                 <h2>Lista de Productos</h2>
                 <div className="tabla-wrapper">
                     <table className="productos-tabla">
                         <thead>
                             <tr>
-                                <th>Imagen</th>
+                                <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Categoría</th>
                                 <th>Precio</th>
+                                <th>Descripción</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {productos && productos.length > 0 ? (
-                                productos.map((producto, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <img
-                                                src={producto.imagen}
-                                                alt={producto.nombre}
-                                                style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 6 }}
-                                                onError={(e) => { e.target.src = '/img/placeholder.png'; }}
-                                            />
-                                        </td>
-                                        <td>{producto.nombre}</td>
-                                        <td>{producto.categoria}</td>
-                                        <td>${producto.precio.toLocaleString()}</td>
-                                        <td>
-                                            <button type="button" onClick={() => handleEdit(index)}>Editar</button>
-                                            <button type="button" onClick={() => handleDelete(index)}>Eliminar</button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr><td colSpan="5">No hay productos disponibles</td></tr>
-                            )}
+                            {productos.map((producto) => (
+                                <tr key={producto.id}>
+                                    <td>{producto.id}</td>
+                                    <td>{producto.nombre_producto}</td>
+                                    <td>{producto.categoria}</td>
+                                    <td>{producto.precio}</td>
+                                    <td>{producto.descripcion}</td>
+                                    <td>
+                                        <button onClick={() => handleEdit(producto)}>Editar</button>
+                                        <button onClick={() => handleDelete(producto.id)}>Eliminar</button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
