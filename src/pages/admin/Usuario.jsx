@@ -1,172 +1,169 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import '../../utils/Usuario.logic.js';
-
+import React, { useState, useEffect } from "react";
+import {
+  obtenerUsuarios,
+  crearUsuario,
+  actualizarUsuario,
+  eliminarUsuario,
+} from "../../services/usuarioService";
 
 export default function Usuario() {
-    const [usuarios, setUsuarios] = useState([]);
-    const [nombre, setNombre] = useState("");
-    const [apellidos, setApellidos] = useState("");
-    const [correo, setCorreo] = useState("");
-    const [region, setRegion] = useState("");
-    const [comuna, setComuna] = useState("");
-    const [edad, setEdad] = useState("");
-    const [editingIndex, setEditingIndex] = useState(null);
+  const [usuarios, setUsuarios] = useState([]);
 
-    useEffect(() => {
-        cargarUsuarios();
-    }, []);
+  const [run, setRun] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [apellidos, setApellidos] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [region, setRegion] = useState("");
+  const [comuna, setComuna] = useState("");
+  const [fechaNac, setFechaNac] = useState("");
+  const [password, setPassword] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [codigo, setCodigo] = useState("");
 
-    const cargarUsuarios = () => {
-        const usuariosGuardados = window.UsuarioLogic.cargarUsuariosFromLocalStorage();
-        setUsuarios(usuariosGuardados);
-    };
+  const [modoEdicion, setModoEdicion] = useState(false);
 
+  useEffect(() => {
+    cargarUsuarios();
+  }, []);
 
-    const agregarUsuario = (e) => {
-        e.preventDefault();
-        try {
-            const nuevosUsuarios = window.UsuarioLogic.agregarUsuario(usuarios, { nombre, apellidos, correo, region, comuna, edad });
-            window.UsuarioLogic.setLocalStorageUsuarios(nuevosUsuarios);
-            setUsuarios(nuevosUsuarios);
-            const reset = window.UsuarioLogic.resetFormData();
-            setNombre(reset.nombre);
-            setApellidos(reset.apellidos);
-            setCorreo(reset.correo);
-            setRegion(reset.region);
-            setComuna(reset.comuna);
-            setEdad(reset.edad);
-            setEditingIndex(reset.editingIndex);
-        } catch (error) {
-            // muestra el error en consola o maneja como quieras
-            console.error('Error agregando usuario:', error.message);
-            alert('Error al agregar usuario: ' + error.message);
-        }
-    };
+  const cargarUsuarios = async () => {
+    const data = await obtenerUsuarios();
+    setUsuarios(data);
+  };
 
+  const resetForm = () => {
+    setRun("");
+    setNombre("");
+    setApellidos("");
+    setCorreo("");
+    setRegion("");
+    setComuna("");
+    setFechaNac("");
+    setPassword("");
+    setDireccion("");
+    setCodigo("");
+    setModoEdicion(false);
+  };
 
-    const editarUsuario = (idx) => {
-        const datos = window.UsuarioLogic.getUsuarioForEditing(usuarios, idx);
-        if (!datos) {
-            console.warn('Índice para editar inválido:', idx);
-            return;
-        }
-        setNombre(datos.nombre);
-        setApellidos(datos.apellidos);
-        setCorreo(datos.correo);
-        setRegion(datos.region);
-        setComuna(datos.comuna);
-        setEdad(datos.edad);
-        setEditingIndex(idx);
-    };
+  const seleccionarUsuario = (u) => {
+    setRun(u.run);
+    setNombre(u.nombre);
+    setApellidos(u.apellidos);
+    setCorreo(u.correo);
+    setRegion(u.region);
+    setComuna(u.comuna);
+    setFechaNac(u.fechaNac);
+    setPassword(u.password);
+    setDireccion(u.direccion);
+    setCodigo(u.codigo);
+    setModoEdicion(true);
+  };
 
+  const agregarUsuarioHandler = async (e) => {
+    e.preventDefault();
+    await crearUsuario({
+      run,
+      nombre,
+      apellidos,
+      correo,
+      region,
+      comuna,
+      fechaNac,
+      password,
+      direccion,
+      codigo,
+    });
+    await cargarUsuarios();
+    resetForm();
+  };
 
-    const actualizarUsuario = (e) => {
-        e.preventDefault();
-        try {
-            const nuevosUsuarios = window.UsuarioLogic.actualizarUsuario(usuarios, editingIndex, { nombre, apellidos, correo, region, comuna, edad });
-            window.UsuarioLogic.setLocalStorageUsuarios(nuevosUsuarios);
-            setUsuarios(nuevosUsuarios);
-            const reset = window.UsuarioLogic.resetFormData();
-            setNombre(reset.nombre);
-            setApellidos(reset.apellidos);
-            setCorreo(reset.correo);
-            setRegion(reset.region);
-            setComuna(reset.comuna);
-            setEdad(reset.edad);
-            setEditingIndex(reset.editingIndex);
-        } catch (err) {
-            console.error('Error al actualizar:', err.message);
-            alert('Error al actualizar: ' + err.message);
-        }
-    };
+  const actualizarUsuarioHandler = async (e) => {
+    e.preventDefault();
+    await actualizarUsuario(run, {
+      run,
+      nombre,
+      apellidos,
+      correo,
+      region,
+      comuna,
+      fechaNac,
+      password,
+      direccion,
+      codigo,
+    });
+    await cargarUsuarios();
+    resetForm();
+  };
 
+  const eliminarUsuarioHandler = async (run) => {
+    if (!window.confirm("¿Eliminar este usuario?")) return;
+    await eliminarUsuario(run);
+    await cargarUsuarios();
+  };
 
-    const eliminarUsuario = (idx) => {
-        if (!window.confirm('¿Seguro que deseas eliminar este usuario?')) return;
-        try {
-            const nuevosUsuarios = window.UsuarioLogic.eliminarUsuarioByIndex(usuarios, idx);
-            window.UsuarioLogic.setLocalStorageUsuarios(nuevosUsuarios);
-            setUsuarios(nuevosUsuarios);
-        } catch (err) {
-            console.error('Error al eliminar usuario:', err.message);
-            alert('Error al eliminar: ' + err.message);
-        }
-    };
+  // 💗 padding para mejorar placeholder y espacio de escritura
+  const inputStyle = { padding: "6px 6px", fontSize: "15px" };
 
-    const resetForm = () => {
-        const reset = window.UsuarioLogic.resetFormData();
-        setNombre(reset.nombre);
-        setApellidos(reset.apellidos);
-        setCorreo(reset.correo);
-        setRegion(reset.region);
-        setComuna(reset.comuna);
-        setEdad(reset.edad);
-        setEditingIndex(reset.editingIndex);
-    };
+  return (
+    <main>
+      <div className="usuarios-container">
+        <h2>Gestión de Usuarios</h2>
 
+        {/* FORMULARIO */}
+        <form onSubmit={modoEdicion ? actualizarUsuarioHandler : agregarUsuarioHandler}>
+          <input style={inputStyle} placeholder="RUN" value={run} onChange={(e) => setRun(e.target.value)} required />
+          <input style={inputStyle} placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+          <input style={inputStyle} placeholder="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} required />
+          <input style={inputStyle} type="email" placeholder="Correo" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
+          <input style={inputStyle} placeholder="Región" value={region} onChange={(e) => setRegion(e.target.value)} required />
+          <input style={inputStyle} placeholder="Comuna" value={comuna} onChange={(e) => setComuna(e.target.value)} required />
+          <input style={inputStyle} type="date" value={fechaNac} onChange={(e) => setFechaNac(e.target.value)} required />
+          <input style={inputStyle} placeholder="Dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} required />
+          <input style={inputStyle} type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input style={inputStyle} placeholder="Código (opcional)" value={codigo} onChange={(e) => setCodigo(e.target.value)} />
 
-    return (
-        <main>
-            <div className="usuarios-container">
-                <div className="usuarios-header">
-                    <h2>Lista de Usuarios</h2>
-                </div>
+          <button type="submit">
+            {modoEdicion ? "Actualizar Usuario" : "Agregar Usuario"}
+          </button>
 
-                <form onSubmit={editingIndex !== null ? actualizarUsuario : agregarUsuario}>
-                    <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre" required />
-                    <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} placeholder="Apellidos" required />
-                    <input type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder="Correo" required />
-                    <input type="text" value={region} onChange={(e) => setRegion(e.target.value)} placeholder="Región" required />
-                    <input type="text" value={comuna} onChange={(e) => setComuna(e.target.value)} placeholder="Comuna" required />
-                    <input type="number" value={edad} onChange={(e) => setEdad(e.target.value)} placeholder="Edad" required />
-                    <button type="submit">{editingIndex !== null ? 'Actualizar Usuario' : 'Agregar Usuario'}</button>
-                    {editingIndex !== null && <button type="button" onClick={resetForm}>Cancelar</button>}
-                </form>
+          {modoEdicion && <button onClick={resetForm}>Cancelar</button>}
+        </form>
 
-                <div id="lista-usuarios-admin">
-                    {!usuarios.length ? (
-                        <p className="no-usuarios">No hay usuarios registrados.</p>
-                    ) : (
-                        <div className="tabla-wrapper">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Apellidos</th>
-                                        <th>Correo</th>
-                                        <th>Región</th>
-                                        <th>Comuna</th>
-                                        <th>Edad</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {usuarios.map((usuario, idx) => (
-                                        <tr key={idx}>
-                                            <td>{usuario.nombre}</td>
-                                            <td>{usuario.apellidos}</td>
-                                            <td>{usuario.correo}</td>
-                                            <td>{usuario.region}</td>
-                                            <td>{usuario.comuna}</td>
-                                            <td>{usuario.edad || ''}</td>
-                                            <td>
-                                                <button onClick={() => editarUsuario(idx)}>Editar</button>
-                                                <button
-                                                    className="btn-eliminar-usuario"
-                                                    onClick={() => eliminarUsuario(idx)}
-                                                >
-                                                    Eliminar
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </main>
-    );
+        {/* TABLA */}
+        <div className="tabla-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>RUN</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Comuna</th>
+                <th>Direccion</th>
+                <th>Contraseña</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {usuarios.map((u) => (
+                <tr key={u.run}>
+                  <td>{u.run}</td>
+                  <td>{u.nombre} {u.apellidos}</td>
+                  <td>{u.correo}</td>
+                  <td>{u.comuna}</td>
+                  <td>{u.direccion}</td>
+                  <td>{u.password}</td>
+                  <td>
+                    <button onClick={() => seleccionarUsuario(u)}>Editar</button>
+                    <button onClick={() => eliminarUsuarioHandler(u.run)}>Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </main>
+  );
 }
