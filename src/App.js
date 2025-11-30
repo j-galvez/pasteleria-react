@@ -22,6 +22,8 @@ import Admin from './pages/admin/Admin';
 import Checkout from './pages/Checkout';
 import CompraExitosa from "./pages/CompraExitosa";
 import CompraFallida from "./pages/CompraFallida";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 import Ventas from './pages/admin/Ventas'; // Asegúrate que la ruta de importación sea correcta
 
@@ -38,19 +40,19 @@ function AppContent() {
       {isAdmin ? <NavbarAdmin /> : <Navbar />}
       <Routes>
         {/* Admin Routes */}
-        <Route path="/administrador" element={<Admin/>} />
-        <Route path="/administrador/producto" element={<Producto />} />
-        <Route path="/administrador/usuario" element={<Usuario />} />
-        <Route path="/administrador/ventas" element={<Ventas />} />
+        <Route path="/administrador" element={<ProtectedRoute requiredRole="ADMIN"><Admin /></ProtectedRoute>}/>
+        <Route path="/administrador/producto" element={<ProtectedRoute requiredRole="ADMIN"> <Producto /></ProtectedRoute>}/>
+        <Route path="/administrador/usuario" element={<ProtectedRoute requiredRole="ADMIN"> <Usuario /> </ProtectedRoute>}/>
+        <Route path="/administrador/ventas" element={<ProtectedRoute requiredRole="ADMIN"><Ventas /></ProtectedRoute>}/>
 
         {/* Public Routes */}
-        <Route path="/" element={<Index/>} />
+        <Route path="/" element={<Index />} />
         <Route path="/index" element={<Index />} />
-        <Route path="/tortas" element={<Tortas/>}/>
+        <Route path="/tortas" element={<Tortas />} />
         <Route path="/postres" element={<Postres />} />
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/registro" element={<Registro />} />
-        <Route path="/login" element={<Login/>} />
+        <Route path="/login" element={<Login />} />
         <Route path="/pago" element={<Pago />} />
         <Route path="/nosotros" element={<Nosotros />} />
         <Route path="/blogs" element={<Blogs />} />
@@ -60,8 +62,8 @@ function AppContent() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/compra-exitosa" element={<CompraExitosa />} />
         <Route path="/compra-fallida" element={<CompraFallida />} />
-        
-        
+
+
         <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
       </Routes>
       <Footer />

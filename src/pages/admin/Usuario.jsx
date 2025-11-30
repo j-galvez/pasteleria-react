@@ -138,6 +138,8 @@ export default function Usuario() {
                 <th>Nombre</th>
                 <th>Correo</th>
                 <th>Comuna</th>
+                <th>Direccion</th>
+                <th>Contraseña</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -149,6 +151,8 @@ export default function Usuario() {
                   <td>{u.nombre} {u.apellidos}</td>
                   <td>{u.correo}</td>
                   <td>{u.comuna}</td>
+                  <td>{u.direccion}</td>
+                  <td>{u.password}</td>
                   <td>
                     <button onClick={() => seleccionarUsuario(u)}>Editar</button>
                     <button onClick={() => eliminarUsuarioHandler(u.run)}>Eliminar</button>

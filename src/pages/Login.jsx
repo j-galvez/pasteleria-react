@@ -1,9 +1,7 @@
-
 import '../utils/Login.logic.js'; 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-
+import { login } from "../services/authService";
 
 export default function Login() {
   const [correo, setCorreo] = useState("");
@@ -12,32 +10,38 @@ export default function Login() {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(false);
 
-  const handleSubmit = (e) => {
-   
-    window.LoginLogic.handleSubmit(
-      e,
-      correo,
-      password,
-      {
-        obtenerUsuarios: function () {
-          try {
-            return JSON.parse(localStorage.getItem("usuarios")) || [];
-          } catch (ex) {
-            return [];
-          }
-        },
-        guardarUsuarioLogueado: function (usuario) {
-          try { localStorage.setItem("usuarioLogueado", JSON.stringify(usuario)); } catch (ex) {}
-        },
-        setSuccess: setSuccess,
-        setError: setError,
-        navigate: navigate,
-        timeoutFn: function (fn, ms) { return setTimeout(fn, ms); }
-      }
-    );
+    try {
+      const response = await login({ correo, password });
+
+      const { token, rol, nombre } = response.data; 
+      // IMPORTANTE: asegúrate de que tu backend retorna estos 3 valores
+
+      // Guardar datos en localStorage
+      const usuarioData = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("rol", rol);
+      localStorage.setItem("nombre", nombre);
+      localStorage.setItem("usuarioLogueado", JSON.stringify(usuarioData));
+
+
+      setSuccess(true);
+
+      setTimeout(() => {
+        if (rol === "ADMIN") {
+          navigate("/"); // usa la misma ruta que en Home
+        } else {
+          navigate("/");
+        }
+      }, 1500);
+
+    } catch (error) {
+      setError(true);
+    }
   };
-
 
   return (
     <main>
